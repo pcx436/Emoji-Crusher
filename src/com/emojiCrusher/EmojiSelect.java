@@ -15,6 +15,7 @@ public class emojiSelect {
     private JPanel panel1;
     private JButton[][] buttons;
     private JButton quitButton;
+    private JFrame frame;
     private JPanel SelectionMenu;
 
     private void createUIComponents() {
@@ -58,12 +59,43 @@ public class emojiSelect {
         SelectionMenu.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("emojiSelect");
+    public JButton[][] getButtons() {
+        return buttons;
+    }
+
+    public void setButtons(JButton[][] buttons) {
+        this.buttons = buttons;
+    }
+
+    public JButton getQuitButton() {
+        return quitButton;
+    }
+
+    public void setQuitButton(JButton quitButton) {
+        this.quitButton = quitButton;
+    }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
+    public JPanel getSelectionMenu() {
+        return SelectionMenu;
+    }
+
+    public void setSelectionMenu(JPanel selectionMenu) {
+        SelectionMenu = selectionMenu;
+    }
+
+    public emojiSelect() {
+        frame = new JFrame("emojiSelect");
         frame.setContentPane(new emojiSelect().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setVisible(true);
     }
 
     {
