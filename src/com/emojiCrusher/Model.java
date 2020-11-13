@@ -6,9 +6,6 @@ import java.util.List;
 import javax.swing.*;
 
 public class Model {
-    public List<List<String>> getScoreTable() {
-        return scoreTable;
-    }
 
     private int maxEmojis;
     private int maxScoreDisplay;
@@ -23,6 +20,11 @@ public class Model {
     public List<List<String>> getScoreTable() {
         return scoreTable;
     }
+
+    public ImageIcon[] getEmojis() {
+        return emojis;
+    }
+
     public Model(int maxEmojis, int maxScores) {
         this.maxEmojis = maxEmojis;
         this.maxScoreDisplay = maxScores;
@@ -55,7 +57,7 @@ public class Model {
             System.out.println("Created both tables.");
 
         } catch (Exception e) {
-            System.out.println("ERROR: Database Connection" + e.getMessage());
+            System.out.println("Error: Database Connection" + e.getMessage());
         }
     }
 
@@ -75,7 +77,7 @@ public class Model {
             System.out.println("Load from Database successfully");
 
         } catch (Exception e) {
-            System.out.println("ERROR: Database Load");
+            System.out.println("ERROR: Can't Load Database");
             System.exit(0);
         }
 
