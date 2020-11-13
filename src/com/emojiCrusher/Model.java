@@ -52,4 +52,26 @@ public class Model {
         }
     }
 
+    public void loadDB() {
+        Statement connection1 = null;
+        String command = "SELECT name, score FROM scoreboard LIMIT " + String.valueOf(maxScoreDisplay) + ";";
+        scoreTable.clear();
+        try {
+            connection1 = database.createStatement();
+            ResultSet res = connection1.executeQuery(command);
+            while (res.next()) {
+                List<String> row = new ArrayList<>();
+                row.add(res.getString("name"));
+                row.add(Integer.toString(Integer.parseInt(res.getString("score"))));
+                scoreTable.add(row);
+            }
+            System.out.println("Load from Database successfully");
+
+        } catch (Exception e) {
+            System.out.println("ERROR: Database Load");
+            System.exit(0);
+        }
+
+    }
+
 }
