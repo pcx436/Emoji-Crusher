@@ -8,7 +8,6 @@ public abstract class ViewInterface {
     protected JFrame frame;
 
     protected void postSetup(){
-//        frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(false);
