@@ -30,16 +30,17 @@ public class GameInterface extends ViewInterface {
 
     private void createUIComponents() {
         int numRows = 4;
+        int numColumns = 5;
         emojiPanel = new JPanel();
-        buttons = new JButton[numRows][numRows];
-        emojiPanel.setLayout(new GridLayout(numRows, numRows));
+        buttons = new JButton[numRows][numColumns];
+        emojiPanel.setLayout(new GridLayout(numRows, numColumns));
 
-        String parent = "./emoji/png/labeled/64/";
+        String parent = "./emoji/png/labeled/Pool/";
         List<File> dirs = new ArrayList<>();
 
         List<ImageIcon> icons = new ArrayList<>();
 
-        dirs.add(new File(parent + "people"));
+        dirs.add(new File(parent));
 
         //List of all files and directories
         for (File d : dirs) {
@@ -49,7 +50,7 @@ public class GameInterface extends ViewInterface {
         }
 
         for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numRows; j++) {
+            for (int j = 0; j < numColumns; j++) {
                 Optional<ImageIcon> e = getRandom(icons);
                 if (e.isPresent()) {
                     JButton current = new JButton(e.get());
