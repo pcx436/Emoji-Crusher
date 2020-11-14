@@ -20,8 +20,6 @@ public class GameInterface extends ViewInterface {
     private JPanel subPanel;
     private JProgressBar timeBar;
     private JLabel ScoreLabel;
-    private JButton quitButton;
-    private JPanel mainPanel;
 
     // https://stackoverflow.com/a/40087987
     private static <E> Optional<E> getRandom(Collection<E> e) {
@@ -75,12 +73,6 @@ public class GameInterface extends ViewInterface {
         scoreValue.setBackground(new Color(0, 0, 0, 0));
     }
 
-    public void setData(boundForm data) {
-    }
-
-    public void getData(boundForm data) {
-    }
-
     public boolean isModified(boundForm data) {
         return false;
     }
@@ -131,13 +123,6 @@ public class GameInterface extends ViewInterface {
 
     public void setScoreLabel(JLabel scoreLabel) {
         ScoreLabel = scoreLabel;
-    }
-    public JButton getQuitButton() {
-        return quitButton;
-    }
-
-    public void setQuitButton(JButton quitButton) {
-        this.quitButton = quitButton;
     }
 
     public GameInterface() {

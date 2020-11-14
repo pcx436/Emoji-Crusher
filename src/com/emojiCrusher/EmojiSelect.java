@@ -14,8 +14,6 @@ import java.util.List;
 public class EmojiSelect extends ViewInterface {
     private JButton[][] buttons;
     private JPanel SelectionMenu;
-    private JButton quitButton;
-    private JPanel mainPanel;
 
     private void createUIComponents() {
         int numRows = 10;
@@ -64,22 +62,6 @@ public class EmojiSelect extends ViewInterface {
 
     public void setButtons(JButton[][] buttons) {
         this.buttons = buttons;
-    }
-
-    public JButton getQuitButton() {
-        return quitButton;
-    }
-
-    public void setQuitButton(JButton quitButton) {
-        this.quitButton = quitButton;
-    }
-
-    public JFrame getFrame() {
-        return frame;
-    }
-
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
     }
 
     public JPanel getSelectionMenu() {

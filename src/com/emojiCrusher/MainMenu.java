@@ -12,8 +12,6 @@ public class MainMenu extends ViewInterface {
     private JButton emojiPickerButton;
     private JButton scoreboardButton;
     private JTextPane emojiCrushTextPane;
-    private JButton quitButton;
-    private JPanel mainPanel;
 
     public JButton getPlayGameButton() {
         return playGameButton;
@@ -47,13 +45,6 @@ public class MainMenu extends ViewInterface {
         this.emojiCrushTextPane = emojiCrushTextPane;
     }
 
-    public JButton getQuitButton() {
-        return quitButton;
-    }
-
-    public void setQuitButton(JButton quitButton) {
-        this.quitButton = quitButton;
-    }
     public MainMenu() {
         super("mainMenu");
         frame.setContentPane(mainPanel);

@@ -10,9 +10,6 @@ import java.awt.*;
 public class ScoreBoard extends ViewInterface {
     private JTable scoreTable;
     private JLabel ScoreBoardLabel;
-    private JButton quitButton;
-
-    private JPanel mainPanel;
 
     private void createUIComponents() {
         String data[][] = {{"JAMA", "500"}, {"VILU", "8000"}};
@@ -44,13 +41,6 @@ public class ScoreBoard extends ViewInterface {
         ScoreBoardLabel = scoreBoardLabel;
     }
 
-    public JButton getQuitButton() {
-        return quitButton;
-    }
-
-    public void setQuitButton(JButton quitButton) {
-        this.quitButton = quitButton;
-    }
     public ScoreBoard() {
         super("scoreBoard");
         $$$setupUI$$$();
