@@ -64,7 +64,8 @@ public class Model {
 
     public void loadDB() {
         Statement connection1 = null;
-        String command = "SELECT name, score FROM scoreboard LIMIT " + String.valueOf(maxScoreDisplay) + ";";
+        String command = "SELECT name, score FROM scoreboard ORDER BY score DESC LIMIT "+
+                String.valueOf(maxScoreDisplay) + ";";
         scoreTable.clear();
         try {
             connection1 = database.createStatement();
