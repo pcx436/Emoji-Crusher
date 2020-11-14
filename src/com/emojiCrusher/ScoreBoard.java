@@ -12,6 +12,7 @@ public class ScoreBoard extends ViewInterface {
     private JLabel ScoreBoardLabel;
 
     private void createUIComponents() {
+
         String data[][] = {{"JAMA", "500"}, {"VILU", "8000"}};
         String column[] = {"Name", "Score"};
         scoreTable = new JTable(data, column);
