@@ -66,7 +66,7 @@ public class MainMenu extends ViewInterface {
      *
      * @noinspection ALL
      */
-    private void $$$setupUI$$$() {
+    protected void $$$setupUI$$$() {
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayoutManager(8, 1, new Insets(0, 0, 0, 0), -1, -1));
         playGameButton = new JButton();

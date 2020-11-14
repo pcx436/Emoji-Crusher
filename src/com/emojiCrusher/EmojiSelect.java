@@ -86,7 +86,7 @@ public class EmojiSelect extends ViewInterface {
      *
      * @noinspection ALL
      */
-    private void $$$setupUI$$$() {
+    protected void $$$setupUI$$$() {
         createUIComponents();
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
