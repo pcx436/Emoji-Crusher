@@ -12,10 +12,7 @@ public class ScoreBoard extends ViewInterface {
     private JLabel ScoreBoardLabel;
 
     private void createUIComponents() {
-
-        String data[][] = {{"JAMA", "500"}, {"VILU", "8000"}};
-        String column[] = {"Name", "Score"};
-        scoreTable = new JTable(data, column);
+        scoreTable = new JTable();
     }
 
     public JTable getScoreTable() {
@@ -24,6 +21,7 @@ public class ScoreBoard extends ViewInterface {
 
     public void setScoreTable(JTable scoreTable) {
         this.scoreTable = scoreTable;
+        this.mainPanel.revalidate();
     }
 
     public JPanel getMainPanel() {
@@ -32,6 +30,7 @@ public class ScoreBoard extends ViewInterface {
 
     public void setMainPanel(JPanel mainPanel) {
         this.mainPanel = mainPanel;
+        this.mainPanel.revalidate();
     }
 
     public JLabel getScoreBoardLabel() {
@@ -40,6 +39,7 @@ public class ScoreBoard extends ViewInterface {
 
     public void setScoreBoardLabel(JLabel scoreBoardLabel) {
         ScoreBoardLabel = scoreBoardLabel;
+        this.mainPanel.revalidate();
     }
 
     public ScoreBoard() {
