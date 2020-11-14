@@ -30,6 +30,7 @@ public class Model {
         this.maxScoreDisplay = maxScores;
         scoreTable = new ArrayList();
         createDB();
+        loadDB();
     }
 
     private void createDB() {
