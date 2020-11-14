@@ -57,7 +57,7 @@ public class Model {
 
             System.out.println("Created both tables.");
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Error: Database Connection" + e.getMessage());
         }
     }
@@ -77,8 +77,8 @@ public class Model {
             }
             System.out.println("Load from Database successfully");
 
-        } catch (Exception e) {
-            System.out.println("ERROR: Can't Load Database");
+        } catch (SQLException e) {
+            System.out.println("ERROR: Can't Load Database: " + e.getMessage());
             System.exit(0);
         }
 
