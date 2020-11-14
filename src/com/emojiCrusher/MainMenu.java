@@ -7,14 +7,11 @@ import com.intellij.uiDesigner.core.Spacer;
 import javax.swing.*;
 import java.awt.*;
 
-public class MainMenu {
+public class MainMenu extends ViewInterface {
     private JButton playGameButton;
     private JButton emojiPickerButton;
     private JButton scoreboardButton;
-    private JFrame frame;
     private JTextPane emojiCrushTextPane;
-    private JButton exitButton;
-    private JPanel mainPanel;
 
     public JButton getPlayGameButton() {
         return playGameButton;
@@ -48,12 +45,11 @@ public class MainMenu {
         this.emojiCrushTextPane = emojiCrushTextPane;
     }
 
-    public JButton getExitButton() {
-        return exitButton;
-    }
-
-    public void setExitButton(JButton exitButton) {
-        this.exitButton = exitButton;
+    public MainMenu() {
+        super("mainMenu");
+        frame.setContentPane(mainPanel);
+        frame.setVisible(true);
+        postSetup();
     }
 
     {
@@ -70,7 +66,7 @@ public class MainMenu {
      *
      * @noinspection ALL
      */
-    private void $$$setupUI$$$() {
+    protected void $$$setupUI$$$() {
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayoutManager(8, 1, new Insets(0, 0, 0, 0), -1, -1));
         playGameButton = new JButton();
@@ -96,9 +92,9 @@ public class MainMenu {
         if (emojiCrushTextPaneFont != null) emojiCrushTextPane.setFont(emojiCrushTextPaneFont);
         emojiCrushTextPane.setText("Emoji Crush!");
         mainPanel.add(emojiCrushTextPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
-        exitButton = new JButton();
-        exitButton.setText("Exit");
-        mainPanel.add(exitButton, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        quitButton = new JButton();
+        quitButton.setText("Exit");
+        mainPanel.add(quitButton, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
@@ -125,32 +121,5 @@ public class MainMenu {
      */
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
-    }
-
-    public JFrame getFrame() {
-        return frame;
-    }
-
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
-    }
-
-    public static void main(String[] args) {
-        MainMenu m = new MainMenu();
-/*
-        JFrame frame = new JFrame("MainMenu");
-        frame.setContentPane(new MainMenu().mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-*/
-    }
-
-    public MainMenu() {
-        frame = new JFrame("mainMenu");
-        frame.setContentPane(mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
     }
 }

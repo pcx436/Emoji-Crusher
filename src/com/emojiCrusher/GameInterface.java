@@ -13,16 +13,13 @@ import java.io.File;
 import java.util.*;
 import java.util.List;
 
-public class GameInterface {
+public class GameInterface extends ViewInterface {
     private JButton[][] buttons;
-    private JButton quitGame;
     private JTextPane scoreValue;
     private JPanel emojiPanel;
-    private JPanel yeenus;
     private JPanel subPanel;
     private JProgressBar timeBar;
     private JLabel ScoreLabel;
-    private final JFrame frame;
 
     // https://stackoverflow.com/a/40087987
     private static <E> Optional<E> getRandom(Collection<E> e) {
@@ -68,19 +65,12 @@ public class GameInterface {
 
         emojiPanel.setVisible(true);
 
-
         scoreValue = new JTextPane();
         StyledDocument doc = scoreValue.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
         scoreValue.setBackground(new Color(0, 0, 0, 0));
-    }
-
-    public void setData(boundForm data) {
-    }
-
-    public void getData(boundForm data) {
     }
 
     public boolean isModified(boundForm data) {
@@ -93,14 +83,6 @@ public class GameInterface {
 
     public void setButtons(JButton[][] buttons) {
         this.buttons = buttons;
-    }
-
-    public JButton getQuitGame() {
-        return quitGame;
-    }
-
-    public void setQuitGame(JButton quitGame) {
-        this.quitGame = quitGame;
     }
 
     public JTextPane getScoreValue() {
@@ -117,14 +99,6 @@ public class GameInterface {
 
     public void setEmojiPanel(JPanel emojiPanel) {
         this.emojiPanel = emojiPanel;
-    }
-
-    public JPanel getYeenus() {
-        return yeenus;
-    }
-
-    public void setYeenus(JPanel yeenus) {
-        this.yeenus = yeenus;
     }
 
     public JPanel getSubPanel() {
@@ -151,16 +125,11 @@ public class GameInterface {
         ScoreLabel = scoreLabel;
     }
 
-    public JFrame getFrame() {
-        return frame;
-    }
-
     public GameInterface() {
-        frame = new JFrame("gameInterface");
+        super("gameInterface");
         $$$setupUI$$$();
-        frame.setContentPane(yeenus);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
+        frame.setContentPane(mainPanel);
+        postSetup();
     }
 
     /**
@@ -170,13 +139,13 @@ public class GameInterface {
      *
      * @noinspection ALL
      */
-    private void $$$setupUI$$$() {
+    protected void $$$setupUI$$$() {
         createUIComponents();
-        yeenus = new JPanel();
-        yeenus.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
         subPanel = new JPanel();
         subPanel.setLayout(new GridLayoutManager(4, 1, new Insets(0, 0, 0, 0), -1, -1));
-        yeenus.add(subPanel, new GridConstraints(0, 1, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        mainPanel.add(subPanel, new GridConstraints(0, 1, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         ScoreLabel = new JLabel();
         Font ScoreLabelFont = this.$$$getFont$$$(null, -1, 24, ScoreLabel.getFont());
         if (ScoreLabelFont != null) ScoreLabel.setFont(ScoreLabelFont);
@@ -186,15 +155,15 @@ public class GameInterface {
         Font scoreValueFont = this.$$$getFont$$$(null, -1, 20, scoreValue.getFont());
         if (scoreValueFont != null) scoreValue.setFont(scoreValueFont);
         scoreValue.setText("4,600");
-        subPanel.add(scoreValue, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        subPanel.add(scoreValue, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, 50), null, 0, false));
         final Spacer spacer1 = new Spacer();
         subPanel.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
         subPanel.add(spacer2, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        quitGame = new JButton();
-        quitGame.setText("Quit");
-        yeenus.add(quitGame, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        yeenus.add(emojiPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(572, 24), null, 0, false));
+        quitButton = new JButton();
+        quitButton.setText("Quit");
+        mainPanel.add(quitButton, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mainPanel.add(emojiPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(572, 24), null, 0, false));
         timeBar = new JProgressBar();
         timeBar.setBackground(new Color(-4980731));
         timeBar.setIndeterminate(false);
@@ -202,7 +171,7 @@ public class GameInterface {
         timeBar.setString("0%");
         timeBar.setStringPainted(false);
         timeBar.setValue(30);
-        yeenus.add(timeBar, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mainPanel.add(timeBar, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         ScoreLabel.setLabelFor(scoreValue);
     }
 
@@ -229,7 +198,6 @@ public class GameInterface {
      * @noinspection ALL
      */
     public JComponent $$$getRootComponent$$$() {
-        return yeenus;
+        return mainPanel;
     }
-
 }

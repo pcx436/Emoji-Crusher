@@ -11,11 +11,8 @@ import java.io.File;
 import java.util.*;
 import java.util.List;
 
-public class EmojiSelect {
-    private JPanel panel1;
+public class EmojiSelect extends ViewInterface {
     private JButton[][] buttons;
-    private JButton quitButton;
-    private JFrame frame;
     private JPanel SelectionMenu;
 
     private void createUIComponents() {
@@ -67,22 +64,6 @@ public class EmojiSelect {
         this.buttons = buttons;
     }
 
-    public JButton getQuitButton() {
-        return quitButton;
-    }
-
-    public void setQuitButton(JButton quitButton) {
-        this.quitButton = quitButton;
-    }
-
-    public JFrame getFrame() {
-        return frame;
-    }
-
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
-    }
-
     public JPanel getSelectionMenu() {
         return SelectionMenu;
     }
@@ -92,11 +73,10 @@ public class EmojiSelect {
     }
 
     public EmojiSelect() {
-        frame = new JFrame("emojiSelect");
+        super("emojiSelect");
         $$$setupUI$$$();
-        frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
+        frame.setContentPane(mainPanel);
+        postSetup();
     }
 
     /**
@@ -106,21 +86,20 @@ public class EmojiSelect {
      *
      * @noinspection ALL
      */
-    private void $$$setupUI$$$() {
+    protected void $$$setupUI$$$() {
         createUIComponents();
-        panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         quitButton = new JButton();
         quitButton.setText("Quit");
-        panel1.add(quitButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        panel1.add(SelectionMenu, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        mainPanel.add(quitButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mainPanel.add(SelectionMenu, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     }
 
     /**
      * @noinspection ALL
      */
     public JComponent $$$getRootComponent$$$() {
-        return panel1;
+        return mainPanel;
     }
-
 }
