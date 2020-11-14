@@ -54,13 +54,15 @@ public class Controller {
             scoreBoard.getFrame().setVisible(true);
             mainMenu.getFrame().setVisible(false);
             List<List<String>> res = model.getScoreTable();
-            String [][]table = new String[res.size()][2];
-            for(int i = 0; i < res.size(); i++){
-                table[i][0] = res.get(i).get(0);
-                table[i][1] = res.get(i).get(1);
-            }
-            String column[] = {"Name", "Score"};
-            scoreBoard.setScoreTable(new JTable(table, column));
+
+            // wipe list
+            for (int i = scoreBoard.getTableModel().getRowCount() - 1; i >= 0; i--)
+                scoreBoard.getTableModel().removeRow(i);
+
+            // add the current items to the array
+            for (List<String> l: res)
+                scoreBoard.getTableModel().addRow(l.toArray());
+
         });
         mainMenu.getQuitButton().addActionListener(actionEvent -> System.exit(0));
     }
