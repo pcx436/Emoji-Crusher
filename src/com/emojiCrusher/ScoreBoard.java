@@ -5,14 +5,27 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class ScoreBoard extends ViewInterface {
     private JTable scoreTable;
     private JLabel ScoreBoardLabel;
+    private DefaultTableModel tableModel;
+
+    public DefaultTableModel getTableModel() {
+        return tableModel;
+    }
+
+    public void setTableModel(DefaultTableModel tableModel) {
+        this.tableModel = tableModel;
+    }
 
     private void createUIComponents() {
-        scoreTable = new JTable();
+        tableModel = new DefaultTableModel();
+        tableModel.addColumn("Name");
+        tableModel.addColumn("Score");
+        scoreTable = new JTable(tableModel);
     }
 
     public JTable getScoreTable() {
