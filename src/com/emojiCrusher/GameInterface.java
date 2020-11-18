@@ -5,10 +5,13 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.*;
 import java.util.List;
@@ -21,6 +24,8 @@ public class GameInterface extends ViewInterface {
     private JProgressBar timeBar;
     private JLabel ScoreLabel;
     private Timer time;
+    private Timer timeRate;
+
     public void startTime(){
         ActionListener countDown = new ActionListener() {
             @Override
@@ -29,6 +34,22 @@ public class GameInterface extends ViewInterface {
             };
         };
         time = new Timer(1000, countDown);
+
+        ActionListener TimeRate = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                time.setDelay(time.getDelay()/2);
+            };
+        };
+        timeRate = new Timer(30000, TimeRate);
+    }
+    public Timer getTimeRate() {
+        return timeRate;
+    }
+
+    public void setTimeRate(Timer timeRate) {
+        this.timeRate = timeRate;
+    }
 
     public Timer getTime() {
         return time;
@@ -147,6 +168,7 @@ public class GameInterface extends ViewInterface {
         $$$setupUI$$$();
         frame.setContentPane(mainPanel);
         postSetup();
+        startTime();
     }
 
     /**
@@ -187,7 +209,7 @@ public class GameInterface extends ViewInterface {
         timeBar.setMinimum(0);
         timeBar.setString("0%");
         timeBar.setStringPainted(false);
-        timeBar.setValue(30);
+        timeBar.setValue(100);
         mainPanel.add(timeBar, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         ScoreLabel.setLabelFor(scoreValue);
     }
