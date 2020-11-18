@@ -10,6 +10,7 @@ public class Controller {
     private final GameInterface gameInterface;
     private final ScoreBoard scoreBoard;
     private final MainMenu mainMenu;
+    private final GameOver gameOver;
     private Model model;
     private Timer time;
     private Timer timeRate;
@@ -21,13 +22,13 @@ public class Controller {
                 gameInterface.getTimeBar().setValue(gameInterface.getTimeBar().getValue()-1);
                 if(gameInterface.getTimeBar().getValue()==0){
                     gameInterface.getFrame().setVisible(false);
-                    //TODO display name entry view
+                    gameOver.getFrame().setVisible(true);
                     time.stop();
                     timeRate.stop();
                 }
             };
         };
-        time = new Timer(1000, countDown);
+        time = new Timer(10, countDown);
 
         ActionListener TimeRate = new ActionListener() {
             @Override
@@ -35,7 +36,7 @@ public class Controller {
                 time.setDelay(time.getDelay()/2);
             };
         };
-        timeRate = new Timer(10000, TimeRate);
+        timeRate = new Timer(10, TimeRate);
     }
 
     public Controller() {
@@ -43,6 +44,7 @@ public class Controller {
         gameInterface = new GameInterface();
         scoreBoard = new ScoreBoard();
         mainMenu = new MainMenu();
+        gameOver = new GameOver();
         model = new Model(5, 10);
 
         quitBehavior();
@@ -100,6 +102,12 @@ public class Controller {
 
         });
         mainMenu.getQuitButton().addActionListener(actionEvent -> System.exit(0));
+
+        gameOver.getNameField().addActionListener(actionEvent -> {
+            System.out.println("ya hit enter: " + gameOver.getNameField().getText());
+            gameOver.getFrame().setVisible(false);
+            mainMenu.getFrame().setVisible(true);
+        });
     }
 
 }
