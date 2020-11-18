@@ -20,7 +20,23 @@ public class GameInterface extends ViewInterface {
     private JPanel subPanel;
     private JProgressBar timeBar;
     private JLabel ScoreLabel;
+    private Timer time;
+    public void startTime(){
+        ActionListener countDown = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timeBar.setValue(timeBar.getValue()-1);
+            };
+        };
+        time = new Timer(1000, countDown);
 
+    public Timer getTime() {
+        return time;
+    }
+
+    public void setTime(Timer time) {
+        this.time = time;
+    }
     // https://stackoverflow.com/a/40087987
     private static <E> Optional<E> getRandom(Collection<E> e) {
         return e.stream()
