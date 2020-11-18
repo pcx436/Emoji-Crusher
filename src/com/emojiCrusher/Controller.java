@@ -1,6 +1,8 @@
 package com.emojiCrusher;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class Controller {
@@ -9,6 +11,32 @@ public class Controller {
     private final ScoreBoard scoreBoard;
     private final MainMenu mainMenu;
     private Model model;
+    private Timer time;
+    private Timer timeRate;
+
+    public void startTime(){
+        ActionListener countDown = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameInterface.getTimeBar().setValue(gameInterface.getTimeBar().getValue()-1);
+                if(gameInterface.getTimeBar().getValue()==0){
+                    gameInterface.getFrame().setVisible(false);
+                    //TODO display name entry view
+                    time.stop();
+                    timeRate.stop();
+                }
+            };
+        };
+        time = new Timer(1000, countDown);
+
+        ActionListener TimeRate = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                time.setDelay(time.getDelay()/2);
+            };
+        };
+        timeRate = new Timer(10000, TimeRate);
+    }
 
     public Controller() {
         emojiSelect = new EmojiSelect();
@@ -33,6 +61,8 @@ public class Controller {
         gameInterface.getQuitButton().addActionListener(actionEvent -> {
             gameInterface.getFrame().setVisible(false);
             mainMenu.getFrame().setVisible(true);
+            time.stop();
+            timeRate.stop();
         });
 
         scoreBoard.getQuitButton().addActionListener(actionEvent -> {
@@ -42,15 +72,18 @@ public class Controller {
     }
 
     private void initMain() {
+        startTime();
         mainMenu.getEmojiPickerButton().addActionListener(actionEvent -> {
             emojiSelect.getFrame().setVisible(true);
             mainMenu.getFrame().setVisible(false);
         });
         mainMenu.getPlayGameButton().addActionListener(actionEvent -> {
+            gameInterface.getTimeBar().setValue(100);
+            time.setDelay(1000);
             gameInterface.getFrame().setVisible(true);
             mainMenu.getFrame().setVisible(false);
-            gameInterface.getTime().start();
-            gameInterface.getTimeRate().start();
+            time.start();
+            timeRate.start();
         });
         mainMenu.getScoreboardButton().addActionListener(actionEvent -> {
             scoreBoard.getFrame().setVisible(true);
