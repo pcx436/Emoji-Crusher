@@ -23,41 +23,7 @@ public class GameInterface extends ViewInterface {
     private JPanel subPanel;
     private JProgressBar timeBar;
     private JLabel ScoreLabel;
-    private Timer time;
-    private Timer timeRate;
 
-    public void startTime(){
-        ActionListener countDown = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                timeBar.setValue(timeBar.getValue()-1);
-            };
-        };
-        time = new Timer(1000, countDown);
-
-        ActionListener TimeRate = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                time.setDelay(time.getDelay()/2);
-            };
-        };
-        timeRate = new Timer(30000, TimeRate);
-    }
-    public Timer getTimeRate() {
-        return timeRate;
-    }
-
-    public void setTimeRate(Timer timeRate) {
-        this.timeRate = timeRate;
-    }
-
-    public Timer getTime() {
-        return time;
-    }
-
-    public void setTime(Timer time) {
-        this.time = time;
-    }
     // https://stackoverflow.com/a/40087987
     private static <E> Optional<E> getRandom(Collection<E> e) {
         return e.stream()
@@ -168,7 +134,6 @@ public class GameInterface extends ViewInterface {
         $$$setupUI$$$();
         frame.setContentPane(mainPanel);
         postSetup();
-        startTime();
     }
 
     /**
