@@ -49,6 +49,8 @@ public class Controller {
         mainMenu.getPlayGameButton().addActionListener(actionEvent -> {
             gameInterface.getFrame().setVisible(true);
             mainMenu.getFrame().setVisible(false);
+            gameInterface.getTime().start();
+            gameInterface.getTimeRate().start();
         });
         mainMenu.getScoreboardButton().addActionListener(actionEvent -> {
             scoreBoard.getFrame().setVisible(true);
