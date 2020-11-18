@@ -5,16 +5,27 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class ScoreBoard extends ViewInterface {
     private JTable scoreTable;
     private JLabel ScoreBoardLabel;
+    private DefaultTableModel tableModel;
+
+    public DefaultTableModel getTableModel() {
+        return tableModel;
+    }
+
+    public void setTableModel(DefaultTableModel tableModel) {
+        this.tableModel = tableModel;
+    }
 
     private void createUIComponents() {
-        String data[][] = {{"JAMA", "500"}, {"VILU", "8000"}};
-        String column[] = {"Name", "Score"};
-        scoreTable = new JTable(data, column);
+        tableModel = new DefaultTableModel();
+        tableModel.addColumn("Name");
+        tableModel.addColumn("Score");
+        scoreTable = new JTable(tableModel);
     }
 
     public JTable getScoreTable() {
@@ -23,6 +34,7 @@ public class ScoreBoard extends ViewInterface {
 
     public void setScoreTable(JTable scoreTable) {
         this.scoreTable = scoreTable;
+        this.mainPanel.revalidate();
     }
 
     public JPanel getMainPanel() {
@@ -31,6 +43,7 @@ public class ScoreBoard extends ViewInterface {
 
     public void setMainPanel(JPanel mainPanel) {
         this.mainPanel = mainPanel;
+        this.mainPanel.revalidate();
     }
 
     public JLabel getScoreBoardLabel() {
@@ -39,6 +52,7 @@ public class ScoreBoard extends ViewInterface {
 
     public void setScoreBoardLabel(JLabel scoreBoardLabel) {
         ScoreBoardLabel = scoreBoardLabel;
+        this.mainPanel.revalidate();
     }
 
     public ScoreBoard() {

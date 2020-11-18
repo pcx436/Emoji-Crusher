@@ -16,17 +16,18 @@ public class EmojiSelect extends ViewInterface {
     private JPanel SelectionMenu;
 
     private void createUIComponents() {
-        int numRows = 10;
+        int numRows = 4;
+        int numColumns = 5;
         SelectionMenu = new JPanel();
-        buttons = new JButton[numRows][numRows];
-        SelectionMenu.setLayout(new GridLayout(numRows, numRows));
+        buttons = new JButton[numRows][numColumns];
+        SelectionMenu.setLayout(new GridLayout(numRows, numColumns));
 
-        String parent = "./emoji/png/labeled/64/";
+        String parent = "./emoji/png/labeled/Pool/";
         List<File> dirs = new ArrayList<>();
 
         List<ImageIcon> icons = new ArrayList<>();
 
-        dirs.add(new File(parent + "people"));
+        dirs.add(new File(parent));
 
         //List of all files and directories
         for (File d : dirs) {
@@ -37,7 +38,7 @@ public class EmojiSelect extends ViewInterface {
 
         int currentIcon = 0;
         for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numRows; j++, currentIcon++) {
+            for (int j = 0; j < numColumns; j++, currentIcon++) {
                 JButton current = new JButton(icons.get(currentIcon));
                 current.setFocusPainted(false);
                 current.setBackground(Color.white);
