@@ -13,6 +13,14 @@ public class Model {
     private Connection database;
     private List<List<String>> scoreTable;
 
+    public Model(int maxEmojis, int maxScores) {
+        this.maxEmojis = maxEmojis;
+        this.maxScoreDisplay = maxScores;
+        scoreTable = new ArrayList();
+        createDB();
+        loadDB();
+    }
+
     public void setEmojis(ImageIcon[] emojis) {
         this.emojis = emojis;
     }
@@ -23,14 +31,6 @@ public class Model {
 
     public ImageIcon[] getEmojis() {
         return emojis;
-    }
-
-    public Model(int maxEmojis, int maxScores) {
-        this.maxEmojis = maxEmojis;
-        this.maxScoreDisplay = maxScores;
-        scoreTable = new ArrayList();
-        createDB();
-        loadDB();
     }
 
     private void createDB() {
