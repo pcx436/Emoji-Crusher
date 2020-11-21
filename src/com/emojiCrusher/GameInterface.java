@@ -24,6 +24,12 @@ public class GameInterface extends ViewInterface {
     private JProgressBar timeBar;
     private JLabel ScoreLabel;
 
+    public GameInterface() {
+        super("gameInterface");
+        $$$setupUI$$$();
+        frame.setContentPane(mainPanel);
+        postSetup();
+    }
     // https://stackoverflow.com/a/40087987
     private static <E> Optional<E> getRandom(Collection<E> e) {
         return e.stream()
@@ -127,13 +133,6 @@ public class GameInterface extends ViewInterface {
 
     public void setScoreLabel(JLabel scoreLabel) {
         ScoreLabel = scoreLabel;
-    }
-
-    public GameInterface() {
-        super("gameInterface");
-        $$$setupUI$$$();
-        frame.setContentPane(mainPanel);
-        postSetup();
     }
 
     /**

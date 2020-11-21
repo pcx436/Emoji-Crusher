@@ -15,30 +15,6 @@ public class Controller {
     private Timer time;
     private Timer timeRate;
 
-    public void startTime(){
-        ActionListener countDown = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gameInterface.getTimeBar().setValue(gameInterface.getTimeBar().getValue()-1);
-                if(gameInterface.getTimeBar().getValue()==0){
-                    gameInterface.getFrame().setVisible(false);
-                    gameOver.getFrame().setVisible(true);
-                    time.stop();
-                    timeRate.stop();
-                }
-            };
-        };
-        time = new Timer(10, countDown);
-
-        ActionListener TimeRate = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                time.setDelay(time.getDelay()/2);
-            };
-        };
-        timeRate = new Timer(10, TimeRate);
-    }
-
     public Controller() {
         emojiSelect = new EmojiSelect();
         gameInterface = new GameInterface();
@@ -52,25 +28,6 @@ public class Controller {
         initMain();
 
         mainMenu.getFrame().setVisible(true);
-    }
-
-    private void quitBehavior() {
-        emojiSelect.getQuitButton().addActionListener(actionEvent -> {
-            emojiSelect.getFrame().setVisible(false);
-            mainMenu.getFrame().setVisible(true);
-        });
-
-        gameInterface.getQuitButton().addActionListener(actionEvent -> {
-            gameInterface.getFrame().setVisible(false);
-            mainMenu.getFrame().setVisible(true);
-            time.stop();
-            timeRate.stop();
-        });
-
-        scoreBoard.getQuitButton().addActionListener(actionEvent -> {
-            scoreBoard.getFrame().setVisible(false);
-            mainMenu.getFrame().setVisible(true);
-        });
     }
 
     private void initMain() {
@@ -110,4 +67,46 @@ public class Controller {
         });
     }
 
+    public void startTime(){
+        ActionListener countDown = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameInterface.getTimeBar().setValue(gameInterface.getTimeBar().getValue()-1);
+                if(gameInterface.getTimeBar().getValue()==0){
+                    gameInterface.getFrame().setVisible(false);
+                    gameOver.getFrame().setVisible(true);
+                    time.stop();
+                    timeRate.stop();
+                }
+            };
+        };
+        time = new Timer(1000, countDown);
+
+        ActionListener TimeRate = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                time.setDelay(time.getDelay()/2);
+            };
+        };
+        timeRate = new Timer(15000, TimeRate);
+    }
+
+    private void quitBehavior() {
+        emojiSelect.getQuitButton().addActionListener(actionEvent -> {
+            emojiSelect.getFrame().setVisible(false);
+            mainMenu.getFrame().setVisible(true);
+        });
+
+        gameInterface.getQuitButton().addActionListener(actionEvent -> {
+            gameInterface.getFrame().setVisible(false);
+            mainMenu.getFrame().setVisible(true);
+            time.stop();
+            timeRate.stop();
+        });
+
+        scoreBoard.getQuitButton().addActionListener(actionEvent -> {
+            scoreBoard.getFrame().setVisible(false);
+            mainMenu.getFrame().setVisible(true);
+        });
+    }
 }
