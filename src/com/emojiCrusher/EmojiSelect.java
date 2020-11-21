@@ -14,8 +14,11 @@ import java.util.List;
 public class EmojiSelect extends ViewInterface {
     private JButton[][] buttons;
     private JPanel SelectionMenu;
+    private int numSelected;
+    private List <String> emojiPaths;
 
     private void createUIComponents() {
+        numSelected = 0;
         int numRows = 4;
         int numColumns = 5;
         SelectionMenu = new JPanel();
@@ -40,12 +43,26 @@ public class EmojiSelect extends ViewInterface {
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numColumns; j++, currentIcon++) {
                 JButton current = new JButton(icons.get(currentIcon));
+                current.setOpaque(true);
                 current.setFocusPainted(false);
-                current.setBackground(Color.white);
+                current.setBackground(Color.WHITE);
                 current.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
-                        current.setBackground(Color.GREEN);
+                        JButton C = (JButton) actionEvent.getSource();
+                        //handles toggling the background green highlight on/off when selected
+                        if(current.getBackground() == Color.white && numSelected < 5) {
+                            //FIXME: replace 5 with a variable
+                            C.setBackground(Color.green);
+                            //emojiPaths.add()
+                            numSelected++;
+                        }
+                        else if (current.getBackground() == Color.green) {
+                            C.setBackground(Color.white);
+                            numSelected--;
+                        }
+                        System.out.println(numSelected);
+
                     }
                 });
 
