@@ -15,6 +15,8 @@ public class EmojiSelect extends ViewInterface {
     private JButton[][] buttons;
     private JPanel SelectionMenu;
     private int numSelected;
+    private final int numRows;
+    private final int numColumns;
 
     public List<String> getEmojiPaths() {
         return emojiPaths;
@@ -24,6 +26,8 @@ public class EmojiSelect extends ViewInterface {
 
     public EmojiSelect() {
         super("emojiSelect");
+        numRows = 4;
+        numColumns = 5;
         $$$setupUI$$$();
         frame.setContentPane(mainPanel);
         postSetup();
@@ -45,8 +49,6 @@ public class EmojiSelect extends ViewInterface {
 
     private void createUIComponents() {
         numSelected = 0;
-        int numRows = 4;
-        int numColumns = 5;
         emojiPaths = new ArrayList<>();
         SelectionMenu = new JPanel();
         buttons = new JButton[numRows][numColumns];
