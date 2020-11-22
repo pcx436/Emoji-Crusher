@@ -3,6 +3,7 @@ package com.emojiCrusher;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import javax.swing.*;
 
 public class Model {
@@ -53,8 +54,21 @@ public class Model {
         return scoreTable;
     }
 
-    public List<String> getEmojis() {
-        return emojis;
+    public List<ImageIcon> getEmojis() {
+        Statement connection = null;
+        List<ImageIcon> icons = new ArrayList<>();
+
+        try {
+            connection = database.createStatement();
+            String command = "SELECT path FROM EmojiPool;";
+            ResultSet resultSet = connection.executeQuery(command);
+            while (resultSet.next()) {
+                icons.add(new ImageIcon(resultSet.getString("path")));
+            }
+        } catch (SQLException e) {
+            System.out.println("ERROR: Couldn't retrieve Paths" + e.getMessage());
+        }
+        return icons;
     }
 
     private void createDB() {
