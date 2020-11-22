@@ -38,7 +38,7 @@ public class Model {
         try {
             connection2 = database.createStatement();
             String s = "(\"" + String.join("\"),(\"", emojis) + "\");";
-            command = "INSERT INTO EmojiPool (path) " + s;
+            command = "INSERT INTO EmojiPool (path) VALUES " + s;
             connection2.executeUpdate(command);
             System.out.println("Added in new Paths");
 
