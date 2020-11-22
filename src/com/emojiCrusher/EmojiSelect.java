@@ -29,6 +29,20 @@ public class EmojiSelect extends ViewInterface {
         postSetup();
     }
 
+    public void loadPaths(List<ImageIcon> icons) {
+        emojiPaths.clear();
+
+        for(ImageIcon icon: icons)
+            emojiPaths.add(icon.toString());
+
+        for (int i = 0; i < numRows; i++)
+            for (int j = 0; j < numColumns; j++)
+                if (emojiPaths.contains(buttons[i][j].getIcon().toString()))
+                    buttons[i][j].setBackground(Color.GREEN);
+                else
+                    buttons[i][j].setBackground(Color.WHITE);
+    }
+
     private void createUIComponents() {
         numSelected = 0;
         int numRows = 4;
