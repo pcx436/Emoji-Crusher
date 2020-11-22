@@ -94,6 +94,8 @@ public class Controller {
     private void quitBehavior() {
         emojiSelect.getQuitButton().addActionListener(actionEvent -> {
             emojiSelect.getFrame().setVisible(false);
+            List<String> path = emojiSelect.getEmojiPaths();
+            model.setEmojis(path);
             mainMenu.getFrame().setVisible(true);
         });
 
