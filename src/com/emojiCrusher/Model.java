@@ -21,15 +21,39 @@ public class Model {
         loadDB();
     }
 
-    public void setEmojis(ImageIcon[] emojis) {
-        this.emojis = emojis;
+    public void setEmojis(List<String> emojis) {
+        Statement connection1 = null;
+        String command = "DELETE FROM EmojiPool Where 1=1";
+        try {
+            connection1 = database.createStatement();
+            connection1.executeUpdate(command);
+            System.out.println("clear old pool");
+
+        } catch (SQLException e) {
+            System.out.println("ERROR: Couldn't clear old pool: " + e.getMessage());
+            System.exit(0);
+        }
+
+        Statement connection2 = null;
+        try {
+            connection2 = database.createStatement();
+            String s = "(\"" + String.join("\"),(\"", emojis) + "\");";
+            command = "INSERT INTO EmojiPool (path) " + s;
+            connection2.executeUpdate(command);
+            System.out.println("Added in new Paths");
+
+        } catch (SQLException e) {
+            System.out.println("ERROR: Couldn't add new Paths" + e.getMessage());
+            System.exit(0);
+        }
+
     }
 
     public List<List<String>> getScoreTable() {
         return scoreTable;
     }
 
-    public ImageIcon[] getEmojis() {
+    public List<String> getEmojis() {
         return emojis;
     }
 
