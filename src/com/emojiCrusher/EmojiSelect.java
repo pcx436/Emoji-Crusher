@@ -55,16 +55,12 @@ public class EmojiSelect extends ViewInterface {
         SelectionMenu.setLayout(new GridLayout(numRows, numColumns));
 
         String parent = "./emoji/png/labeled/Pool/";
-        List<File> dirs = new ArrayList<>();
 
         List<ImageIcon> icons = new ArrayList<>();
 
-        dirs.add(new File(parent));
         //List of all files and directories
-        for (File d : dirs) {
-            for (File icon : Objects.requireNonNull(d.listFiles())) {
-                icons.add(new ImageIcon(icon.getAbsolutePath()));
-            }
+        for (File icon : Objects.requireNonNull(new File(parent).listFiles())) {
+            icons.add(new ImageIcon(icon.getAbsolutePath()));
         }
 
         int currentIcon = 0;
