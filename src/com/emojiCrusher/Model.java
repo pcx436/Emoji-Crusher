@@ -9,7 +9,7 @@ public class Model {
 
     private int maxEmojis;
     private int maxScoreDisplay;
-    private ImageIcon[] emojis;
+    private List<String> emojis;
     private Connection database;
     private List<List<String>> scoreTable;
 
