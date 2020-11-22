@@ -58,24 +58,21 @@ public class EmojiSelect extends ViewInterface {
                 current.setOpaque(true);
                 current.setFocusPainted(false);
                 current.setBackground(Color.WHITE);
-                current.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        JButton C = (JButton) actionEvent.getSource();
-                        //handles toggling the background green highlight on/off when selected
-                        if(current.getBackground() == Color.white && numSelected < 5) {
-                            //FIXME: replace 5 with a variable
-                            C.setBackground(Color.green);
-                            emojiPaths.add(C.getIcon().toString());
-                            System.out.println(emojiPaths);
-                            numSelected++;
-                        }
-                        else if (current.getBackground() == Color.green) {
-                            C.setBackground(Color.white);
-                            emojiPaths.remove(C.getIcon().toString());
-                            System.out.println(emojiPaths);
-                            numSelected--;
-                        }
+                current.addActionListener(actionEvent -> {
+                    JButton C = (JButton) actionEvent.getSource();
+                    //handles toggling the background green highlight on/off when selected
+                    if(current.getBackground() == Color.white && numSelected < 5) {
+                        //FIXME: replace 5 with a variable
+                        C.setBackground(Color.green);
+                        emojiPaths.add(C.getIcon().toString());
+                        System.out.println(emojiPaths);
+                        numSelected++;
+                    }
+                    else if (current.getBackground() == Color.green) {
+                        C.setBackground(Color.white);
+                        emojiPaths.remove(C.getIcon().toString());
+                        System.out.println(emojiPaths);
+                        numSelected--;
                     }
                 });
 
