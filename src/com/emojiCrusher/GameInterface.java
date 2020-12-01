@@ -5,6 +5,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -28,6 +29,8 @@ public class GameInterface extends ViewInterface {
     private int[] firstCoords;
     private int[] secondCoords;
     private final List<ImageIcon> icons;
+    private Timer horizontalRecolorTimer;
+    private Timer verticalRecolorTimer;
 
     public GameInterface() {
         super("gameInterface");
