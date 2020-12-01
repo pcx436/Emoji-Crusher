@@ -274,25 +274,25 @@ public class GameInterface extends ViewInterface {
         switch (dir) {
             case UP:
                 for(int r = cds[0] - 1; r >= 0; r--)
-                    if (getButton(new int[]{r, cds[1]}).getIcon().equals(currentIcon))
+                    if (buttons[r][cds[1]].getIcon().equals(currentIcon))
                         matchCount++;
                 break;
 
             case DOWN:
                 for(int r = cds[0] + 1; r < numRows; r++)
-                    if (getButton(new int[]{r, cds[1]}).getIcon().equals(currentIcon))
+                    if (buttons[r][cds[1]].getIcon().equals(currentIcon))
                         matchCount++;
                 break;
 
             case LEFT:
                 for(int c = cds[1] - 1; c >= 0; c--)
-                    if (getButton(new int[]{cds[0], c}).getIcon().equals(currentIcon))
+                    if (buttons[cds[0]][c].getIcon().equals(currentIcon))
                         matchCount++;
                 break;
 
             case RIGHT:
                 for(int c = cds[1] + 1; c < numColumns; c++)
-                    if (getButton(new int[]{cds[0], c}).getIcon().equals(currentIcon))
+                    if (buttons[cds[0]][c].getIcon().equals(currentIcon))
                         matchCount++;
                 break;
         }
