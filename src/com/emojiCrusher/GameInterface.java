@@ -176,6 +176,7 @@ public class GameInterface extends ViewInterface {
 
         // TODO: Continually match on newly generated icons
         if (buttonsAdjacent(firstCoords, secondCoords)) {
+            getButton(firstCoords).setBackground(Color.WHITE);
             swapIcons(firstCoords, secondCoords);
 
             int up = countMatches(secondCoords, UP);
@@ -206,8 +207,6 @@ public class GameInterface extends ViewInterface {
                 getButton(secondCoords).setBackground(Color.WHITE);
             }
         }
-        getButton(firstCoords).setBackground(Color.WHITE);
-        getButton(secondCoords).setBackground(Color.WHITE);
         firstCoords = new int[]{-1, -1};
     }
 
