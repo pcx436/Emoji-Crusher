@@ -300,6 +300,10 @@ public class GameInterface extends ViewInterface {
     }
 
     private boolean outOfBounds(int[] cds) {
-        return cds[0] < 0 || cds[0] >= numRows || cds[1] < 0 || cds[1] >= numColumns;
+        boolean retVal = cds[0] < 0 || cds[0] >= numRows || cds[1] < 0 || cds[1] >= numColumns;
+        if (retVal)
+            System.err.println("Coordinates [" + cds[0] + ", " + cds[1] + "] out of bounds!");
+
+        return retVal;
     }
 }
