@@ -203,7 +203,47 @@ public class GameInterface extends ViewInterface {
         getButton(firstCoords).setBackground(Color.WHITE);
         getButton(secondCoords).setBackground(Color.WHITE);
         firstCoords = new int[]{-1, -1};
-        secondCoords = new int[]{-1, -1};
+    }
+
+    private void markVertical(int up, int down, int[] coords){
+        for (int row = coords[0] - up; row <= coords[0] + down; row++) {
+            buttons[row][coords[1]].setBackground(Color.GREEN);
+            buttons[row][coords[1]].validate();
+        }
+    }
+
+    private void markHorizontal(int left, int right, int[] coords) {
+        for (int col = coords[1] - left; col <= coords[1] + right; col++) {
+            buttons[coords[0]][col].setBackground(Color.GREEN);
+            buttons[coords[0]][col].validate();
+        }
+    }
+
+    private void clearVertical(int up, int down, int[] coords) {
+        verticalRecolorTimer = new Timer(1500, e -> {
+            for (int row = coords[0] - up; row <= coords[0] + down; row++) {
+                buttons[row][coords[1]].setBackground(Color.WHITE);
+                buttons[row][coords[1]].validate();
+            }
+
+            shiftDown(up, down, coords);
+            secondCoords = new int[]{-1, -1};
+        });
+        verticalRecolorTimer.setRepeats(false);
+        verticalRecolorTimer.start();
+    }
+
+    private void clearHorizontal(int left, int right, int[] coords) {
+        horizontalRecolorTimer = new Timer(1500, e -> {
+            for (int col = coords[1] - left; col <= coords[1] + right; col++) {
+                buttons[coords[0]][col].setBackground(Color.WHITE);
+                shiftDown(0, 0, new int[]{coords[0], col});
+                buttons[coords[0]][col].validate();
+            }
+            secondCoords = new int[]{-1, -1};
+        });
+        horizontalRecolorTimer.setRepeats(false);
+        horizontalRecolorTimer.start();
     }
 
     public void actionPerformed(ActionEvent actionEvent) {
