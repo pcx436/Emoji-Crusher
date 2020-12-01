@@ -174,7 +174,6 @@ public class GameInterface extends ViewInterface {
     }
 
     private void secondPick(int[] coords) {
-        JButton btn = getButton(coords);
         secondCoords = coords;
 
         // TODO: Continually match on newly generated icons
