@@ -174,6 +174,7 @@ public class GameInterface extends ViewInterface {
         JButton btn = getButton(coords);
         secondCoords = coords;
 
+        // TODO: Continually match on newly generated icons
         if (buttonsAdjacent(firstCoords, secondCoords)) {
             swapIcons(firstCoords, secondCoords);
 
