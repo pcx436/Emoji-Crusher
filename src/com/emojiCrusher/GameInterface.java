@@ -212,8 +212,10 @@ public class GameInterface extends ViewInterface {
 
     public void clearBoard() {
         for (int row = 0; row < numRows; row++)
-            for (int col = 0; col < numColumns; col++)
-                buttons[row][col].setIcon(getRandom(icons));
+            for (int col = 0; col < numColumns; col++) {
+                JButton current = buttons[row][col];
+                SwingUtilities.invokeLater(() -> current.setIcon(getRandom(icons)));
+            }
     }
 
     private void shiftDown(int up, int down) {
