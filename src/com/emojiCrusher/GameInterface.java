@@ -233,15 +233,15 @@ public class GameInterface extends ViewInterface {
         for (int row = secondCoords[0] + down; row >= 0; row--) {
             int[] aboveCoords = new int[]{row - totalRemove, column};
             JButton current = getButton(new int[]{row, column});
-            JButton above;
+            Icon above;
 
             if (outOfBounds(aboveCoords)) {
-                above = createButton();
+                above = getRandom(icons);
             } else {
-                above = getButton(aboveCoords);
+                above = getButton(aboveCoords).getIcon();
             }
 
-            current.setIcon(above.getIcon());
+            current.setIcon(above);
         }
     }
     private boolean buttonsAdjacent(int[] cd1, int[] cd2) {
