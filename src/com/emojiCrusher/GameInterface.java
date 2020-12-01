@@ -182,13 +182,16 @@ public class GameInterface extends ViewInterface {
             int left = countMatches(secondCoords, LEFT);
             int right = countMatches(secondCoords, RIGHT);
 
-            if ((up + down >= 2) && (left + right >= 2)){
-                System.out.println("Vertical (" + up + down + ") Horizontal (" + left + right + ")");
-            } else if (up + down >= 2) {
-                System.out.println("Vertical (" + up + down + ")");
+            int horizontalMatch = left + right;
+            int verticalMatch = up + down;
+            if ((verticalMatch >= 2) && (horizontalMatch >= 2)){
+                System.out.println("Vertical (" + verticalMatch + ") Horizontal (" + horizontalMatch + ")");
+            } else if (verticalMatch >= 2) {
+                System.out.println("Vertical (" + verticalMatch + ")");
                 shiftDown(up, down);
-            } else if (left + right >= 2) {
-                System.out.println("Horizontal (" + left + right + ")");
+            } else if (horizontalMatch >= 2) {
+                System.out.println("Horizontal (" + horizontalMatch + ")");
+
             } else {
                 System.out.println("No match");
                 swapIcons(firstCoords, secondCoords);
