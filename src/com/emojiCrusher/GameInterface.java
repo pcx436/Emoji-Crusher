@@ -362,7 +362,7 @@ public class GameInterface extends ViewInterface {
         JButton current = new JButton(getRandom(icons));
         current.addActionListener(this::actionPerformed);
         current.setFocusPainted(false);
-        current.setBackground(Color.white);
+        current.setBackground(Color.WHITE);
         return current;
     }
 
