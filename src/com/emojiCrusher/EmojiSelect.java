@@ -42,6 +42,7 @@ public class EmojiSelect extends ViewInterface {
                 JButton current = new JButton(icons.get(currentIcon));
                 current.setFocusPainted(false);
                 current.setBackground(Color.white);
+                current.setOpaque(true);
                 current.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {

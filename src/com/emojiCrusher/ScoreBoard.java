@@ -13,6 +13,7 @@ public class ScoreBoard extends ViewInterface {
     private JLabel ScoreBoardLabel;
     private DefaultTableModel tableModel;
 
+    // FIXME: table cells are editable???
     public DefaultTableModel getTableModel() {
         return tableModel;
     }

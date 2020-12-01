@@ -39,6 +39,7 @@ public class Controller {
         mainMenu.getPlayGameButton().addActionListener(actionEvent -> {
             gameInterface.getTimeBar().setValue(100);
             time.setDelay(1000);
+            gameInterface.clearBoard();
             gameInterface.getFrame().setVisible(true);
             mainMenu.getFrame().setVisible(false);
             time.start();
@@ -68,27 +69,19 @@ public class Controller {
     }
 
     public void startTime(){
-        ActionListener countDown = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gameInterface.getTimeBar().setValue(gameInterface.getTimeBar().getValue()-1);
-                if(gameInterface.getTimeBar().getValue()==0){
-                    gameInterface.getFrame().setVisible(false);
-                    gameOver.getFrame().setVisible(true);
-                    time.stop();
-                    timeRate.stop();
-                }
-            };
+        ActionListener countDown = e -> {
+            gameInterface.getTimeBar().setValue(gameInterface.getTimeBar().getValue()-1);
+            if(gameInterface.getTimeBar().getValue()==0){
+                gameInterface.getFrame().setVisible(false);
+                gameOver.getFrame().setVisible(true);
+                time.stop();
+                timeRate.stop();
+            }
         };
-        time = new Timer(1000, countDown);
+        time = new Timer(100000, countDown);
 
-        ActionListener TimeRate = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                time.setDelay(time.getDelay()/2);
-            };
-        };
-        timeRate = new Timer(15000, TimeRate);
+        ActionListener TimeRate = e -> time.setDelay(time.getDelay()/2);
+        timeRate = new Timer(90000, TimeRate);
     }
 
     private void quitBehavior() {
