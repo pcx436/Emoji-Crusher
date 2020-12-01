@@ -60,7 +60,7 @@ public class GameInterface extends ViewInterface {
         for (File icon : Objects.requireNonNull(new File(parent).listFiles())) {
             icons.add(new ImageIcon(icon.getAbsolutePath()));
 
-            if (++count == 3)
+            if (++count == 4)
                 break;
         }
 
