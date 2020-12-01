@@ -327,24 +327,32 @@ public class GameInterface extends ViewInterface {
                 for(int r = cds[0] - 1; r >= 0; r--)
                     if (buttons[r][cds[1]].getIcon().equals(currentIcon))
                         matchCount++;
+                    else
+                        break;
                 break;
 
             case DOWN:
                 for(int r = cds[0] + 1; r < numRows; r++)
                     if (buttons[r][cds[1]].getIcon().equals(currentIcon))
                         matchCount++;
+                    else
+                        break;
                 break;
 
             case LEFT:
                 for(int c = cds[1] - 1; c >= 0; c--)
                     if (buttons[cds[0]][c].getIcon().equals(currentIcon))
                         matchCount++;
+                    else
+                        break;
                 break;
 
             case RIGHT:
                 for(int c = cds[1] + 1; c < numColumns; c++)
                     if (buttons[cds[0]][c].getIcon().equals(currentIcon))
                         matchCount++;
+                    else
+                        break;
                 break;
         }
         return matchCount;
