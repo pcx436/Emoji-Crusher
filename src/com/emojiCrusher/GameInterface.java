@@ -272,13 +272,14 @@ public class GameInterface extends ViewInterface {
             }
     }
 
-    private void shiftDown(int up, int down) {
-        int column = secondCoords[1];
+    private int shiftDown(int up, int down, int[] coords) {
+        int column = coords[1];
         int totalRemove = up + down + 1;  // 1 is for newly switched button
+        int points = 0;
 
-        for (int row = secondCoords[0] + down; row >= 0; row--) {
+        for (int row = coords[0] + down; row >= 0; row--) {
             int[] aboveCoords = new int[]{row - totalRemove, column};
-            JButton current = getButton(new int[]{row, column});
+            JButton current = buttons[row][column];
             Icon above;
 
             if (outOfBounds(aboveCoords)) {
@@ -288,8 +289,11 @@ public class GameInterface extends ViewInterface {
             }
 
             current.setIcon(above);
+            current.validate();
         }
+        return 0;
     }
+
     private boolean buttonsAdjacent(int[] cd1, int[] cd2) {
         boolean rowCheck = cd1[0] == cd2[0] && (
                 cd2[1] - 1 == cd1[1] || cd2[1] + 1 == cd1[1]
