@@ -54,9 +54,14 @@ public class GameInterface extends ViewInterface {
 
         String parent = "./emoji/png/labeled/Pool/";
 
-        //List of all files and directories
+        // List of all files in pool
+        // FIXME: Don't use this break system for limiting, migrate to using database later.
+        int count = 0;
         for (File icon : Objects.requireNonNull(new File(parent).listFiles())) {
             icons.add(new ImageIcon(icon.getAbsolutePath()));
+
+            if (++count == 3)
+                break;
         }
 
         for (int i = 0; i < numRows; i++) {
