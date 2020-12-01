@@ -259,14 +259,15 @@ public class GameInterface extends ViewInterface {
     private JButton getButton(int[] cds) { return buttons[cds[0]][cds[1]]; }
 
     private void swapIcons(int[] cd1, int[] cd2) {
-        System.out.println("Is event dispatch thread: " + SwingUtilities.isEventDispatchThread());
         JButton b1 = getButton(cd1);
         JButton b2 = getButton(cd2);
 
         Icon i1 = b1.getIcon();
 
-        b1.setIcon(b2.getIcon());
-        b2.setIcon(i1);
+        SwingUtilities.invokeLater(() -> {
+            b1.setIcon(b2.getIcon());
+            b2.setIcon(i1);
+        });
     }
 
     private int countMatches(int[] cds, MatchDirection dir) {
