@@ -34,6 +34,7 @@ public class Controller {
         startTime();
         mainMenu.getEmojiPickerButton().addActionListener(actionEvent -> {
             emojiSelect.getFrame().setVisible(true);
+            emojiSelect.loadPaths(model.getEmojis());
             mainMenu.getFrame().setVisible(false);
         });
         mainMenu.getPlayGameButton().addActionListener(actionEvent -> {
@@ -87,6 +88,8 @@ public class Controller {
     private void quitBehavior() {
         emojiSelect.getQuitButton().addActionListener(actionEvent -> {
             emojiSelect.getFrame().setVisible(false);
+            List<String> path = emojiSelect.getEmojiPaths();
+            model.setEmojis(path);
             mainMenu.getFrame().setVisible(true);
         });
 
