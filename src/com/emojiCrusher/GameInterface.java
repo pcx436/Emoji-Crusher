@@ -196,24 +196,6 @@ public class GameInterface extends ViewInterface {
             return up + down >= 2 || left + right >= 2;
     }
 
-    private boolean anyMatches() {
-        for (int row = 0; row < numRows; row++)
-            for (int col = 0; col < numColumns; col++)
-                if (checkMatch(new int[]{row, col}, false))
-                    return true;
-        return false;
-    }
-
-    private void autoMatch() {
-        while (anyMatches())
-            for (int row = 0; row < numRows; row++)
-                for (int col = 0; col < numColumns; col++) {
-                    int[] current = new int[]{row, col};
-                    if (checkMatch(current, false))
-                        doMatch(current);
-                }
-    }
-
     private int doMatch(int[] coords) {
         int points = 0;
         int up = countMatches(coords, UP, Optional.empty());
