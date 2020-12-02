@@ -11,6 +11,7 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.sql.*;
 import java.util.*;
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class GameInterface extends ViewInterface {
     private final int numColumns;
     private int[] firstCoords;
     private final List<ImageIcon> icons;
+    private List<String> saved_EmojiPaths = new ArrayList<>();
+    private Connection database;
 
     public GameInterface() {
         super("gameInterface");
@@ -48,6 +51,26 @@ public class GameInterface extends ViewInterface {
                 .findFirst().get();
     }
 
+    private void loadEmojis(){
+        icons.clear();
+        Statement connection = null;
+        try {
+            database = DriverManager.getConnection("jdbc:sqlite:test.db");
+            connection = database.createStatement();
+            String command = "Select * FROM EmojiPool;";
+            ResultSet saved_Emoji = connection.executeQuery(command);
+            while(saved_Emoji.next()){
+                icons.add(new ImageIcon(saved_Emoji.getString("path")));
+                System.out.println(new String(saved_Emoji.getString("path")));
+            }
+            System.out.println("LOADED SAVED EMOJIES FROM DATABASE");
+
+        } catch (SQLException e) {
+            System.out.println("ERROR: Couldn't load saved emojies" + e.getMessage());
+            System.exit(0);
+        }
+    }
+
     private void createUIComponents() {
         emojiPanel = new JPanel();
         buttons = new JButton[numRows][numColumns];
@@ -58,12 +81,7 @@ public class GameInterface extends ViewInterface {
         // List of all files in pool
         // FIXME: Don't use this break system for limiting, migrate to using database later.
         int count = 0;
-        for (File icon : Objects.requireNonNull(new File(parent).listFiles())) {
-            icons.add(new ImageIcon(icon.getAbsolutePath()));
-
-            if (++count == 4)
-                break;
-        }
+        loadEmojis();
 
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numColumns; j++) {
@@ -298,7 +316,7 @@ public class GameInterface extends ViewInterface {
     }
 
     public void clearBoard() {
-        for (int row = 0; row < numRows; row++) {
+        loadEmojis();
             for (int col = 0; col < numColumns; col++) {
                 int finalRow = row;
                 int finalCol = col;
@@ -354,7 +372,6 @@ public class GameInterface extends ViewInterface {
         boolean colCheck = cd1[1] == cd2[1] && (
                 cd1[0] == cd2[0] - 1 || cd1[0] == cd2[0] + 1
                 );
-
         return rowCheck || colCheck;
     }
 
