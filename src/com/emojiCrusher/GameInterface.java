@@ -5,7 +5,6 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
-import javax.swing.Timer;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -28,16 +27,10 @@ public class GameInterface extends ViewInterface {
     private final int numColumns;
     private int[] firstCoords;
     private final List<ImageIcon> icons;
-    private Timer autoTimer;
 
     public GameInterface() {
         super("gameInterface");
         icons = new ArrayList<>();
-
-        // TODO: Use for automated matching?
-        autoTimer = new Timer(500, e -> { autoMatch(); });
-        autoTimer.setRepeats(false);
-        autoTimer.setDelay(501);
 
         numRows = 6;
         numColumns = 6;
