@@ -27,18 +27,22 @@ public class GameInterface extends ViewInterface {
     private final int numRows;
     private final int numColumns;
     private int[] firstCoords;
-    private int[] secondCoords;
     private final List<ImageIcon> icons;
-    private Timer horizontalRecolorTimer;
-    private Timer verticalRecolorTimer;
+    private Timer autoTimer;
 
     public GameInterface() {
         super("gameInterface");
         icons = new ArrayList<>();
+
+        // need actionListener for start
+
+        autoTimer = new Timer(500, e -> { autoMatch(); });
+        autoTimer.setRepeats(false);
+        autoTimer.setDelay(501);
+
         numRows = 6;
         numColumns = 6;
         firstCoords = new int[]{-1,-1};
-        secondCoords = new int[]{-1,-1};
         $$$setupUI$$$();
         frame.setContentPane(mainPanel);
         postSetup();
@@ -174,83 +178,105 @@ public class GameInterface extends ViewInterface {
     }
 
     private void secondPick(int[] coords) {
-        secondCoords = coords;
-
         // TODO: Continually match on newly generated icons
-        if (buttonsAdjacent(firstCoords, secondCoords)) {
+        if (buttonsAdjacent(firstCoords, coords)) {
             getButton(firstCoords).setBackground(Color.WHITE);
-            swapIcons(firstCoords, secondCoords);
+            swapIcons(firstCoords, coords);
 
-            int up = countMatches(secondCoords, UP);
-            int down = countMatches(secondCoords, DOWN);
-            int left = countMatches(secondCoords, LEFT);
-            int right = countMatches(secondCoords, RIGHT);
+            if (!checkMatch(coords) && !checkMatch(firstCoords))
+                swapIcons(firstCoords, coords);
 
-            int horizontalMatch = left + right;
-            int verticalMatch = up + down;
-            if ((verticalMatch >= 2) && (horizontalMatch >= 2)){
-                System.out.println("Vertical (" + verticalMatch + ") Horizontal (" + horizontalMatch + ")");
-                markVertical(up, down, coords);
-                markHorizontal(left, right, coords);
-                clearVertical(up, down, coords);
-                clearHorizontal(left, right, coords);
-            } else if (verticalMatch >= 2) {
-                System.out.println("Vertical (" + verticalMatch + ")");
-                markVertical(up, down, coords);
-                clearVertical(up, down, coords);
-            } else if (horizontalMatch >= 2) {
-                System.out.println("Horizontal (" + horizontalMatch + ")");
-                markHorizontal(left, right, coords);
-                clearHorizontal(left, right, coords);
-            } else {
-                System.out.println("No match");
-                swapIcons(firstCoords, secondCoords);
-                getButton(firstCoords).setBackground(Color.WHITE);
-                getButton(secondCoords).setBackground(Color.WHITE);
-            }
+            if (checkMatch(coords))
+                doMatch(coords, false);
+            if (checkMatch(firstCoords))
+                doMatch(coords, false);
         }
         firstCoords = new int[]{-1, -1};
+    }
+
+    private boolean checkMatch(int[] coords) {
+        int up = countMatches(coords, UP);
+        int down = countMatches(coords, DOWN);
+        int left = countMatches(coords, LEFT);
+        int right = countMatches(coords, RIGHT);
+        return up + down >= 2 || left + right >= 2;
+    }
+
+    private boolean anyMatches() {
+        for (int row = 0; row < numRows; row++)
+            for (int col = 0; col < numColumns; col++)
+                if (checkMatch(new int[]{row, col}))
+                    return true;
+        return false;
+    }
+
+    private void autoMatch() {
+        while (anyMatches())
+            for (int row = 0; row < numRows; row++)
+                for (int col = 0; col < numColumns; col++) {
+                    int[] current = new int[]{row, col};
+                    if (checkMatch(current))
+                        doMatch(current, false);
+                }
+    }
+
+    private void doMatch(int[] coords, boolean timed) {
+        int up = countMatches(coords, UP);
+        int down = countMatches(coords, DOWN);
+        int left = countMatches(coords, LEFT);
+        int right = countMatches(coords, RIGHT);
+        int horizontalMatch = left + right;
+        int verticalMatch = up + down;
+
+        if ((verticalMatch >= 2) && (horizontalMatch >= 2)){
+            System.out.println("Vertical (" + verticalMatch + ") Horizontal (" + horizontalMatch + ")");
+            markVertical(up, down, coords);
+            markHorizontal(left, right, coords);
+            clearVertical(up, down, coords);
+            clearHorizontal(left, right, coords);
+        } else if (verticalMatch >= 2) {
+            System.out.println("Vertical (" + verticalMatch + ")");
+            markVertical(up, down, coords);
+            clearVertical(up, down, coords);
+        } else if (horizontalMatch >= 2) {
+            System.out.println("Horizontal (" + horizontalMatch + ")");
+            markHorizontal(left, right, coords);
+            clearHorizontal(left, right, coords);
+        } else {
+            System.out.println("No match");
+            getButton(coords).setBackground(Color.WHITE);
+        }
     }
 
     private void markVertical(int up, int down, int[] coords){
         for (int row = coords[0] - up; row <= coords[0] + down; row++) {
             buttons[row][coords[1]].setBackground(Color.GREEN);
-            buttons[row][coords[1]].validate();
         }
+        emojiPanel.validate();
     }
 
     private void markHorizontal(int left, int right, int[] coords) {
         for (int col = coords[1] - left; col <= coords[1] + right; col++) {
             buttons[coords[0]][col].setBackground(Color.GREEN);
-            buttons[coords[0]][col].validate();
         }
+        emojiPanel.validate();
     }
 
     private void clearVertical(int up, int down, int[] coords) {
-        verticalRecolorTimer = new Timer(1500, e -> {
-            for (int row = coords[0] - up; row <= coords[0] + down; row++) {
-                buttons[row][coords[1]].setBackground(Color.WHITE);
-                buttons[row][coords[1]].validate();
-            }
+        for (int row = coords[0] - up; row <= coords[0] + down; row++) {
+            buttons[row][coords[1]].setBackground(Color.WHITE);
+        }
+        emojiPanel.validate();
 
-            shiftDown(up, down, coords);
-            secondCoords = new int[]{-1, -1};
-        });
-        verticalRecolorTimer.setRepeats(false);
-        verticalRecolorTimer.start();
+        shiftDown(up, down, coords);
     }
 
     private void clearHorizontal(int left, int right, int[] coords) {
-        horizontalRecolorTimer = new Timer(1500, e -> {
-            for (int col = coords[1] - left; col <= coords[1] + right; col++) {
-                buttons[coords[0]][col].setBackground(Color.WHITE);
-                shiftDown(0, 0, new int[]{coords[0], col});
-                buttons[coords[0]][col].validate();
-            }
-            secondCoords = new int[]{-1, -1};
-        });
-        horizontalRecolorTimer.setRepeats(false);
-        horizontalRecolorTimer.start();
+        for (int col = coords[1] - left; col <= coords[1] + right; col++) {
+            buttons[coords[0]][col].setBackground(Color.WHITE);
+            shiftDown(0, 0, new int[]{coords[0], col});
+        }
+        emojiPanel.validate();
     }
 
     public void actionPerformed(ActionEvent actionEvent) {
@@ -267,11 +293,56 @@ public class GameInterface extends ViewInterface {
     }
 
     public void clearBoard() {
+
         for (int row = 0; row < numRows; row++)
             for (int col = 0; col < numColumns; col++) {
                 JButton current = buttons[row][col];
-                SwingUtilities.invokeLater(() -> current.setIcon(getRandom(icons)));
+                Icon i = getRandom(icons);
+                current.setIcon(i);
+                emojiPanel.validate();
+                SwingUtilities.invokeLater(() -> {
+                    current.setIcon(i);
+                    emojiPanel.validate();
+                });
             }
+
+
+        // ensure we don't have any matches already in the page
+        if (anyMatches()) {
+            for (int row = 0; row < numRows; row++)
+                for (int col = 0; col < numColumns; col++) {
+                    if (checkMatch(new int[]{row, col})) {
+                        JButton currentButton = buttons[row][col];
+                        Icon currentIcon = currentButton.getIcon();
+                        Icon nextIcon;
+
+                        do {
+                            nextIcon = getRandom(icons);
+                        } while (nextIcon.equals(currentIcon) || createsMatch(nextIcon, new int[]{row, col}));
+
+                        Icon finalNextIcon = nextIcon;
+                        System.out.println("Changing [" + row + ", " + col + "] from " + currentIcon.toString() + " to " + nextIcon.toString());
+
+                        currentButton.setIcon(finalNextIcon);
+                        emojiPanel.validate();
+                        SwingUtilities.invokeLater(() -> {
+                            currentButton.setIcon(finalNextIcon);
+                            emojiPanel.validate();
+                        });
+                    }
+                }
+        }
+    }
+
+    private boolean createsMatch(Icon icon, int[] coords) {
+        Icon backup = buttons[coords[0]][coords[1]].getIcon();
+        boolean result;
+
+        buttons[coords[0]][coords[1]].setIcon(icon);
+
+        result = checkMatch(coords);
+        buttons[coords[0]][coords[1]].setIcon(backup);
+        return result;
     }
 
     private int shiftDown(int up, int down, int[] coords) {
@@ -291,7 +362,7 @@ public class GameInterface extends ViewInterface {
             }
 
             current.setIcon(above);
-            current.validate();
+            emojiPanel.validate();
         }
         return 0;
     }
@@ -318,6 +389,8 @@ public class GameInterface extends ViewInterface {
 
         b1.setIcon(b2.getIcon());
         b2.setIcon(i1);
+
+        emojiPanel.validate();
     }
 
     private int countMatches(int[] cds, MatchDirection dir) {
