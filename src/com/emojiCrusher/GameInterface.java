@@ -19,6 +19,7 @@ import static com.emojiCrusher.MatchDirection.*;
 public class GameInterface extends ViewInterface {
     private JButton[][] buttons;
     private JTextPane scoreValue;
+    private int totalPoints;
     private JPanel emojiPanel;
     private JPanel subPanel;
     private JProgressBar timeBar;
@@ -34,6 +35,7 @@ public class GameInterface extends ViewInterface {
 
         numRows = 6;
         numColumns = 6;
+        totalPoints = 0;
         firstCoords = new int[]{-1,-1};
         $$$setupUI$$$();
         frame.setContentPane(mainPanel);
@@ -169,17 +171,30 @@ public class GameInterface extends ViewInterface {
         if (buttonsAdjacent(firstCoords, coords) &&
                 (createsMatch(getButton(coords).getIcon(), firstCoords, false) ||
                         createsMatch(getButton(firstCoords).getIcon(), coords, false))) {
-            int points = 0;
             System.out.println("Match occured!");
             getButton(firstCoords).setBackground(Color.WHITE);
             swapIcons(firstCoords, coords);
+            int points = 0;
 
             if (checkMatch(coords, false))
                 points += doMatch(coords);
             if (checkMatch(firstCoords, false))
                 points += doMatch(firstCoords);
             firstCoords = new int[]{-1, -1};
+            totalPoints += points;
 
+            int currentVal = timeBar.getValue();
+            if (currentVal + points > 100)
+                currentVal = 100;
+            else
+                currentVal += points;
+
+            int finalCurrentVal = currentVal;
+            SwingUtilities.invokeLater(() -> {
+                timeBar.setValue(finalCurrentVal);
+                // FIXME: score getting overlayed on top of other scores...
+                scoreValue.setText(String.valueOf(totalPoints));
+            });
             System.out.println("Scored " + points + " points!");
         }
     }
