@@ -166,23 +166,21 @@ public class GameInterface extends ViewInterface {
     }
 
     private void secondPick(int[] coords) {
-        if (buttonsAdjacent(firstCoords, coords)) {
+        if (buttonsAdjacent(firstCoords, coords) &&
+                (createsMatch(getButton(coords).getIcon(), firstCoords, false) ||
+                        createsMatch(getButton(firstCoords).getIcon(), coords, false))) {
+            int points = 0;
+            System.out.println("Match occured!");
+            getButton(firstCoords).setBackground(Color.WHITE);
+            swapIcons(firstCoords, coords);
 
-            if (createsMatch(getButton(coords).getIcon(), firstCoords, false) ||
-                    createsMatch(getButton(firstCoords).getIcon(), coords, false)) {
-                int points = 0;
-                System.out.println("Match occured!");
-                getButton(firstCoords).setBackground(Color.WHITE);
-                swapIcons(firstCoords, coords);
+            if (checkMatch(coords, false))
+                points += doMatch(coords);
+            if (checkMatch(firstCoords, false))
+                points += doMatch(firstCoords);
+            firstCoords = new int[]{-1, -1};
 
-                if (checkMatch(coords, false))
-                    points += doMatch(coords);
-                if (checkMatch(firstCoords, false))
-                    points += doMatch(firstCoords);
-                firstCoords = new int[]{-1, -1};
-
-                System.out.println("Scored " + points + " points!");
-            }
+            System.out.println("Scored " + points + " points!");
         }
     }
 
