@@ -19,6 +19,7 @@ import static com.emojiCrusher.MatchDirection.*;
 public class GameInterface extends ViewInterface {
     private JButton[][] buttons;
     private JTextPane scoreValue;
+    private int totalPoints;
     private JPanel emojiPanel;
     private JPanel subPanel;
     private JProgressBar timeBar;
@@ -26,16 +27,16 @@ public class GameInterface extends ViewInterface {
     private final int numRows;
     private final int numColumns;
     private int[] firstCoords;
-    private int[] secondCoords;
     private final List<ImageIcon> icons;
 
     public GameInterface() {
         super("gameInterface");
         icons = new ArrayList<>();
+
         numRows = 6;
         numColumns = 6;
+        totalPoints = 0;
         firstCoords = new int[]{-1,-1};
-        secondCoords = new int[]{-1,-1};
         $$$setupUI$$$();
         frame.setContentPane(mainPanel);
         postSetup();
@@ -81,12 +82,16 @@ public class GameInterface extends ViewInterface {
         scoreValue.setBackground(new Color(0, 0, 0, 0));
     }
 
-    public JTextPane getScoreValue() {
-        return scoreValue;
-    }
-
     public JProgressBar getTimeBar() {
         return timeBar;
+    }
+
+    public int getTotalPoints() {
+        return totalPoints;
+    }
+
+    public void setTotalPoints(int totalPoints) {
+        this.totalPoints = totalPoints;
     }
 
     protected void $$$setupUI$$$() {
@@ -171,38 +176,112 @@ public class GameInterface extends ViewInterface {
     }
 
     private void secondPick(int[] coords) {
-        JButton btn = getButton(coords);
-        secondCoords = coords;
+        if (buttonsAdjacent(firstCoords, coords) &&
+                (createsMatch(getButton(coords).getIcon(), firstCoords, false) ||
+                        createsMatch(getButton(firstCoords).getIcon(), coords, false))) {
+            System.out.println("Match occured!");
+            getButton(firstCoords).setBackground(Color.WHITE);
+            swapIcons(firstCoords, coords);
+            int points = 0;
 
-        if (buttonsAdjacent(firstCoords, secondCoords)) {
-            swapIcons(firstCoords, secondCoords);
+            if (checkMatch(coords, false))
+                points += doMatch(coords);
+            if (checkMatch(firstCoords, false))
+                points += doMatch(firstCoords);
+            firstCoords = new int[]{-1, -1};
+            totalPoints += points;
 
-            int up = countMatches(secondCoords, UP);
-            int down = countMatches(secondCoords, DOWN);
-            int left = countMatches(secondCoords, LEFT);
-            int right = countMatches(secondCoords, RIGHT);
+            int currentVal = timeBar.getValue();
+            if (currentVal + points > 100)
+                currentVal = 100;
+            else
+                currentVal += points;
 
-            int horizontalMatch = left + right;
-            int verticalMatch = up + down;
-            if ((verticalMatch >= 2) && (horizontalMatch >= 2)){
-                System.out.println("Vertical (" + verticalMatch + ") Horizontal (" + horizontalMatch + ")");
-            } else if (verticalMatch >= 2) {
-                System.out.println("Vertical (" + verticalMatch + ")");
-                shiftDown(up, down);
-            } else if (horizontalMatch >= 2) {
-                System.out.println("Horizontal (" + horizontalMatch + ")");
-
-            } else {
-                System.out.println("No match");
-                swapIcons(firstCoords, secondCoords);
-                getButton(firstCoords).setBackground(Color.WHITE);
-                getButton(secondCoords).setBackground(Color.WHITE);
-            }
+            int finalCurrentVal = currentVal;
+            SwingUtilities.invokeLater(() -> {
+                timeBar.setValue(finalCurrentVal);
+                // FIXME: score getting overlayed on top of other scores...
+                scoreValue.setText(String.valueOf(totalPoints));
+            });
+            System.out.println("Scored " + points + " points!");
         }
-        getButton(firstCoords).setBackground(Color.WHITE);
-        getButton(secondCoords).setBackground(Color.WHITE);
-        firstCoords = new int[]{-1, -1};
-        secondCoords = new int[]{-1, -1};
+    }
+
+    private boolean checkMatch(int[] coords, boolean ignorePositiveX) {
+        int up = countMatches(coords, UP, Optional.empty());
+        int down = countMatches(coords, DOWN, Optional.empty());
+        int left = countMatches(coords, LEFT, Optional.empty());
+        int right = countMatches(coords, RIGHT, Optional.empty());
+
+        if (ignorePositiveX)
+            return up >= 2 || left >= 2;
+        else
+            return up + down >= 2 || left + right >= 2;
+    }
+
+    private int doMatch(int[] coords) {
+        int points = 0;
+        int up = countMatches(coords, UP, Optional.empty());
+        int down = countMatches(coords, DOWN, Optional.empty());
+        int left = countMatches(coords, LEFT, Optional.empty());
+        int right = countMatches(coords, RIGHT, Optional.empty());
+        int horizontalMatch = left + right;
+        int verticalMatch = up + down;
+
+        if ((verticalMatch >= 2) && (horizontalMatch >= 2)){
+            System.out.println("Vertical (" + verticalMatch + ") Horizontal (" + horizontalMatch + ")");
+            markVertical(up, down, coords);
+            markHorizontal(left, right, coords);
+            clearVertical(up, down, coords);
+            clearHorizontal(left, right, coords);
+            points = verticalMatch + horizontalMatch;
+        } else if (verticalMatch >= 2) {
+            System.out.println("Vertical (" + verticalMatch + ")");
+            markVertical(up, down, coords);
+            clearVertical(up, down, coords);
+            points = verticalMatch;
+        } else if (horizontalMatch >= 2) {
+            System.out.println("Horizontal (" + horizontalMatch + ")");
+            markHorizontal(left, right, coords);
+            clearHorizontal(left, right, coords);
+            points = horizontalMatch;
+        } else {
+            System.out.println("No match");
+            getButton(coords).setBackground(Color.WHITE);
+        }
+
+        return points;
+    }
+
+    private void markVertical(int up, int down, int[] coords){
+        for (int row = coords[0] - up; row <= coords[0] + down; row++) {
+            buttons[row][coords[1]].setBackground(Color.GREEN);
+        }
+        emojiPanel.validate();
+    }
+
+    private void markHorizontal(int left, int right, int[] coords) {
+        for (int col = coords[1] - left; col <= coords[1] + right; col++) {
+            buttons[coords[0]][col].setBackground(Color.GREEN);
+        }
+        emojiPanel.validate();
+    }
+
+    private void clearVertical(int up, int down, int[] coords) {
+        for (int row = coords[0] - up; row <= coords[0] + down; row++) {
+            buttons[row][coords[1]].setBackground(Color.WHITE);
+        }
+        emojiPanel.validate();
+
+        shiftDown(up, down, coords);
+    }
+
+    private void clearHorizontal(int left, int right, int[] coords) {
+        for (int col = coords[1] - left; col <= coords[1] + right; col++) {
+            buttons[coords[0]][col].setBackground(Color.WHITE);
+            shiftDown(0, 0, new int[]{coords[0], col});
+        }
+        emojiPanel.validate();
     }
 
     public void actionPerformed(ActionEvent actionEvent) {
@@ -219,31 +298,55 @@ public class GameInterface extends ViewInterface {
     }
 
     public void clearBoard() {
-        for (int row = 0; row < numRows; row++)
+        for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numColumns; col++) {
-                JButton current = buttons[row][col];
-                SwingUtilities.invokeLater(() -> current.setIcon(getRandom(icons)));
+                int finalRow = row;
+                int finalCol = col;
+                SwingUtilities.invokeLater(() -> {
+                    JButton current = buttons[finalRow][finalCol];
+                    Icon i;
+                    do {
+                        i = getRandom(icons);
+                    } while (countMatches(new int[]{finalRow, finalCol}, UP, Optional.of(i)) >= 2 ||
+                            countMatches(new int[]{finalRow, finalCol}, LEFT, Optional.of(i)) >= 2);
+                    current.setIcon(i);
+                });
             }
-    }
-
-    private void shiftDown(int up, int down) {
-        int column = secondCoords[1];
-        int totalRemove = up + down + 1;  // 1 is for newly switched button
-
-        for (int row = secondCoords[0] + down; row >= 0; row--) {
-            int[] aboveCoords = new int[]{row - totalRemove, column};
-            JButton current = getButton(new int[]{row, column});
-            JButton above;
-
-            if (outOfBounds(aboveCoords)) {
-                above = createButton();
-            } else {
-                above = getButton(aboveCoords);
-            }
-
-            current.setIcon(above.getIcon());
         }
     }
+
+    private boolean createsMatch(Icon icon, int[] coords, boolean ignorePositiveX) {
+        Icon backup = buttons[coords[0]][coords[1]].getIcon();
+        boolean result;
+
+        buttons[coords[0]][coords[1]].setIcon(icon);
+
+        result = checkMatch(coords, ignorePositiveX);
+        buttons[coords[0]][coords[1]].setIcon(backup);
+        return result;
+    }
+
+    private void shiftDown(int up, int down, int[] coords) {
+        int column = coords[1];
+        int totalRemove = up + down + 1;  // 1 is for newly switched button
+
+        for (int row = coords[0] + down; row >= 0; row--) {
+            int[] aboveCoords = new int[]{row - totalRemove, column};
+            JButton current = buttons[row][column];
+            Icon above;
+
+            if (outOfBounds(aboveCoords)) {
+                above = getRandom(icons);
+            } else {
+                above = getButton(aboveCoords).getIcon();
+            }
+
+            // TODO: possibly move into invokeLater
+            current.setIcon(above);
+            emojiPanel.validate();
+        }
+    }
+
     private boolean buttonsAdjacent(int[] cd1, int[] cd2) {
         boolean rowCheck = cd1[0] == cd2[0] && (
                 cd2[1] - 1 == cd1[1] || cd2[1] + 1 == cd1[1]
@@ -266,34 +369,45 @@ public class GameInterface extends ViewInterface {
 
         b1.setIcon(b2.getIcon());
         b2.setIcon(i1);
+
+        emojiPanel.validate();
     }
 
-    private int countMatches(int[] cds, MatchDirection dir) {
+    private int countMatches(int[] cds, MatchDirection dir, Optional<Icon> icon) {
         int matchCount = 0;
-        Icon currentIcon = getButton(cds).getIcon();
+        Icon currentIcon = icon.orElse(getButton(cds).getIcon());
+
         switch (dir) {
             case UP:
                 for(int r = cds[0] - 1; r >= 0; r--)
                     if (buttons[r][cds[1]].getIcon().equals(currentIcon))
                         matchCount++;
+                    else
+                        break;
                 break;
 
             case DOWN:
                 for(int r = cds[0] + 1; r < numRows; r++)
                     if (buttons[r][cds[1]].getIcon().equals(currentIcon))
                         matchCount++;
+                    else
+                        break;
                 break;
 
             case LEFT:
                 for(int c = cds[1] - 1; c >= 0; c--)
                     if (buttons[cds[0]][c].getIcon().equals(currentIcon))
                         matchCount++;
+                    else
+                        break;
                 break;
 
             case RIGHT:
                 for(int c = cds[1] + 1; c < numColumns; c++)
                     if (buttons[cds[0]][c].getIcon().equals(currentIcon))
                         matchCount++;
+                    else
+                        break;
                 break;
         }
         return matchCount;
@@ -303,7 +417,7 @@ public class GameInterface extends ViewInterface {
         JButton current = new JButton(getRandom(icons));
         current.addActionListener(this::actionPerformed);
         current.setFocusPainted(false);
-        current.setBackground(Color.white);
+        current.setBackground(Color.WHITE);
         return current;
     }
 

@@ -40,6 +40,7 @@ public class Controller {
         mainMenu.getPlayGameButton().addActionListener(actionEvent -> {
             gameInterface.getTimeBar().setValue(100);
             time.setDelay(1000);
+            gameInterface.setTotalPoints(0);
             gameInterface.clearBoard();
             gameInterface.getFrame().setVisible(true);
             mainMenu.getFrame().setVisible(false);
@@ -64,6 +65,7 @@ public class Controller {
 
         gameOver.getNameField().addActionListener(actionEvent -> {
             System.out.println("ya hit enter: " + gameOver.getNameField().getText());
+            System.out.println("Points: " + gameInterface.getTotalPoints());
             gameOver.getFrame().setVisible(false);
             mainMenu.getFrame().setVisible(true);
         });
@@ -79,10 +81,10 @@ public class Controller {
                 timeRate.stop();
             }
         };
-        time = new Timer(100000, countDown);
+        time = new Timer(1000, countDown);
 
         ActionListener TimeRate = e -> time.setDelay(time.getDelay()/2);
-        timeRate = new Timer(90000, TimeRate);
+        timeRate = new Timer(30000, TimeRate);
     }
 
     private void quitBehavior() {
