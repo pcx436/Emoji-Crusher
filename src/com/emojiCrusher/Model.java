@@ -51,7 +51,7 @@ public class Model {
     }
 
     public void saveScore(int totalScore, String name) {
-        String command = "INSERT INTO scoreBoard(name, score) VALUES (" + name + ", " + String.valueOf(totalScore) + ");";
+        String command = "INSERT INTO scoreBoard(name, score) VALUES (\"" + name + "\", " + String.valueOf(totalScore) + ");";
         Statement connection2 = null;
         try {
             connection2 = database.createStatement();
@@ -62,6 +62,7 @@ public class Model {
             System.out.println("ERROR: Score machine broke" + e.getMessage());
             System.exit(0);
         }
+        loadDB();
 
     }
 
