@@ -330,10 +330,9 @@ public class GameInterface extends ViewInterface {
         return result;
     }
 
-    private int shiftDown(int up, int down, int[] coords) {
+    private void shiftDown(int up, int down, int[] coords) {
         int column = coords[1];
         int totalRemove = up + down + 1;  // 1 is for newly switched button
-        int points = 0;
 
         for (int row = coords[0] + down; row >= 0; row--) {
             int[] aboveCoords = new int[]{row - totalRemove, column};
@@ -350,7 +349,6 @@ public class GameInterface extends ViewInterface {
             current.setIcon(above);
             emojiPanel.validate();
         }
-        return 0;
     }
 
     private boolean buttonsAdjacent(int[] cd1, int[] cd2) {
