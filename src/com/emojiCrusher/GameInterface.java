@@ -80,7 +80,7 @@ public class GameInterface extends ViewInterface {
         // List of all files in pool
         // FIXME: Don't use this break system for limiting, migrate to using database later.
         int count = 0;
-        for (File icon : Objects.requireNonNull(new File(parent).listFiles())) {
+        loadEmojis();
 
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numColumns; j++) {
@@ -238,6 +238,7 @@ public class GameInterface extends ViewInterface {
     }
 
     public void clearBoard() {
+        loadEmojis();
         for (int row = 0; row < numRows; row++)
             for (int col = 0; col < numColumns; col++) {
                 JButton current = buttons[row][col];
