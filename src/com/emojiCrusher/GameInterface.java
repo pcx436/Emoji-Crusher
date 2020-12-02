@@ -173,20 +173,22 @@ public class GameInterface extends ViewInterface {
     }
 
     private void secondPick(int[] coords) {
-        // TODO: Continually match on newly generated icons
         if (buttonsAdjacent(firstCoords, coords)) {
 
             if (createsMatch(getButton(coords).getIcon(), firstCoords, false) ||
                     createsMatch(getButton(firstCoords).getIcon(), coords, false)) {
+                int points = 0;
                 System.out.println("Match occured!");
                 getButton(firstCoords).setBackground(Color.WHITE);
                 swapIcons(firstCoords, coords);
 
                 if (checkMatch(coords, false))
-                    doMatch(coords, false);
+                    points += doMatch(coords);
                 if (checkMatch(firstCoords, false))
-                    doMatch(firstCoords, false);
+                    points += doMatch(firstCoords);
                 firstCoords = new int[]{-1, -1};
+
+                System.out.println("Scored " + points + " points!");
             }
         }
     }
@@ -217,11 +219,12 @@ public class GameInterface extends ViewInterface {
                 for (int col = 0; col < numColumns; col++) {
                     int[] current = new int[]{row, col};
                     if (checkMatch(current, false))
-                        doMatch(current, false);
+                        doMatch(current);
                 }
     }
 
-    private void doMatch(int[] coords, boolean timed) {
+    private int doMatch(int[] coords) {
+        int points = 0;
         int up = countMatches(coords, UP, Optional.empty());
         int down = countMatches(coords, DOWN, Optional.empty());
         int left = countMatches(coords, LEFT, Optional.empty());
@@ -235,18 +238,23 @@ public class GameInterface extends ViewInterface {
             markHorizontal(left, right, coords);
             clearVertical(up, down, coords);
             clearHorizontal(left, right, coords);
+            points = verticalMatch + horizontalMatch;
         } else if (verticalMatch >= 2) {
             System.out.println("Vertical (" + verticalMatch + ")");
             markVertical(up, down, coords);
             clearVertical(up, down, coords);
+            points = verticalMatch;
         } else if (horizontalMatch >= 2) {
             System.out.println("Horizontal (" + horizontalMatch + ")");
             markHorizontal(left, right, coords);
             clearHorizontal(left, right, coords);
+            points = horizontalMatch;
         } else {
             System.out.println("No match");
             getButton(coords).setBackground(Color.WHITE);
         }
+
+        return points;
     }
 
     private void markVertical(int up, int down, int[] coords){
