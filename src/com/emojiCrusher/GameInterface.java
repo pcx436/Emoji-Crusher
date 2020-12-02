@@ -11,6 +11,7 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.sql.*;
 import java.util.*;
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class GameInterface extends ViewInterface {
     private int[] firstCoords;
     private int[] secondCoords;
     private final List<ImageIcon> icons;
+    private List<String> saved_EmojiPaths = new ArrayList<>();
+    private Connection database;
 
     public GameInterface() {
         super("gameInterface");
