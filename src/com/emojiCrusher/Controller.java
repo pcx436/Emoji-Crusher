@@ -81,10 +81,10 @@ public class Controller {
                 timeRate.stop();
             }
         };
-        time = new Timer(100000, countDown);
+        time = new Timer(1000, countDown);
 
         ActionListener TimeRate = e -> time.setDelay(time.getDelay()/2);
-        timeRate = new Timer(90000, TimeRate);
+        timeRate = new Timer(30000, TimeRate);
     }
 
     private void quitBehavior() {
