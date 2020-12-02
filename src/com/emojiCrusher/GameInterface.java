@@ -195,10 +195,10 @@ public class GameInterface extends ViewInterface {
     }
 
     private boolean checkMatch(int[] coords) {
-        int up = countMatches(coords, UP);
-        int down = countMatches(coords, DOWN);
-        int left = countMatches(coords, LEFT);
-        int right = countMatches(coords, RIGHT);
+        int up = countMatches(coords, UP, Optional.empty());
+        int down = countMatches(coords, DOWN, Optional.empty());
+        int left = countMatches(coords, LEFT, Optional.empty());
+        int right = countMatches(coords, RIGHT, Optional.empty());
         return up + down >= 2 || left + right >= 2;
     }
 
@@ -221,10 +221,10 @@ public class GameInterface extends ViewInterface {
     }
 
     private void doMatch(int[] coords, boolean timed) {
-        int up = countMatches(coords, UP);
-        int down = countMatches(coords, DOWN);
-        int left = countMatches(coords, LEFT);
-        int right = countMatches(coords, RIGHT);
+        int up = countMatches(coords, UP, Optional.empty());
+        int down = countMatches(coords, DOWN, Optional.empty());
+        int left = countMatches(coords, LEFT, Optional.empty());
+        int right = countMatches(coords, RIGHT, Optional.empty());
         int horizontalMatch = left + right;
         int verticalMatch = up + down;
 
@@ -393,9 +393,10 @@ public class GameInterface extends ViewInterface {
         emojiPanel.validate();
     }
 
-    private int countMatches(int[] cds, MatchDirection dir) {
+    private int countMatches(int[] cds, MatchDirection dir, Optional<Icon> icon) {
         int matchCount = 0;
-        Icon currentIcon = getButton(cds).getIcon();
+        Icon currentIcon = icon.orElse(getButton(cds).getIcon());
+
         switch (dir) {
             case UP:
                 for(int r = cds[0] - 1; r >= 0; r--)
