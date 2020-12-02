@@ -66,6 +66,7 @@ public class Controller {
         gameOver.getNameField().addActionListener(actionEvent -> {
             System.out.println("ya hit enter: " + gameOver.getNameField().getText());
             System.out.println("Points: " + gameInterface.getTotalPoints());
+            model.saveScore(gameInterface.getTotalPoints(), gameOver.getNameField().getText());
             gameOver.getFrame().setVisible(false);
             mainMenu.getFrame().setVisible(true);
         });
