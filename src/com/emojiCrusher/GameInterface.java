@@ -86,6 +86,14 @@ public class GameInterface extends ViewInterface {
         return timeBar;
     }
 
+    public int getTotalPoints() {
+        return totalPoints;
+    }
+
+    public void setTotalPoints(int totalPoints) {
+        this.totalPoints = totalPoints;
+    }
+
     protected void $$$setupUI$$$() {
         createUIComponents();
         mainPanel = new JPanel();
