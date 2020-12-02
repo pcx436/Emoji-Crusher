@@ -317,7 +317,9 @@ public class GameInterface extends ViewInterface {
 
     public void clearBoard() {
         loadEmojis();
+        for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numColumns; col++) {
+
                 int finalRow = row;
                 int finalCol = col;
                 SwingUtilities.invokeLater(() -> {
