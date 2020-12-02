@@ -34,8 +34,7 @@ public class GameInterface extends ViewInterface {
         super("gameInterface");
         icons = new ArrayList<>();
 
-        // need actionListener for start
-
+        // TODO: Use for automated matching?
         autoTimer = new Timer(500, e -> { autoMatch(); });
         autoTimer.setRepeats(false);
         autoTimer.setDelay(501);
@@ -86,10 +85,6 @@ public class GameInterface extends ViewInterface {
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
         scoreValue.setBackground(new Color(0, 0, 0, 0));
-    }
-
-    public JTextPane getScoreValue() {
-        return scoreValue;
     }
 
     public JProgressBar getTimeBar() {
@@ -180,32 +175,38 @@ public class GameInterface extends ViewInterface {
     private void secondPick(int[] coords) {
         // TODO: Continually match on newly generated icons
         if (buttonsAdjacent(firstCoords, coords)) {
-            getButton(firstCoords).setBackground(Color.WHITE);
-            swapIcons(firstCoords, coords);
 
-            if (!checkMatch(coords) && !checkMatch(firstCoords))
+            if (createsMatch(getButton(coords).getIcon(), firstCoords, false) ||
+                    createsMatch(getButton(firstCoords).getIcon(), coords, false)) {
+                System.out.println("Match occured!");
+                getButton(firstCoords).setBackground(Color.WHITE);
                 swapIcons(firstCoords, coords);
 
-            if (checkMatch(coords))
-                doMatch(coords, false);
-            if (checkMatch(firstCoords))
-                doMatch(coords, false);
+                if (checkMatch(coords, false))
+                    doMatch(coords, false);
+                if (checkMatch(firstCoords, false))
+                    doMatch(firstCoords, false);
+                firstCoords = new int[]{-1, -1};
+            }
         }
-        firstCoords = new int[]{-1, -1};
     }
 
-    private boolean checkMatch(int[] coords) {
+    private boolean checkMatch(int[] coords, boolean ignorePositiveX) {
         int up = countMatches(coords, UP, Optional.empty());
         int down = countMatches(coords, DOWN, Optional.empty());
         int left = countMatches(coords, LEFT, Optional.empty());
         int right = countMatches(coords, RIGHT, Optional.empty());
-        return up + down >= 2 || left + right >= 2;
+
+        if (ignorePositiveX)
+            return up >= 2 || left >= 2;
+        else
+            return up + down >= 2 || left + right >= 2;
     }
 
     private boolean anyMatches() {
         for (int row = 0; row < numRows; row++)
             for (int col = 0; col < numColumns; col++)
-                if (checkMatch(new int[]{row, col}))
+                if (checkMatch(new int[]{row, col}, false))
                     return true;
         return false;
     }
@@ -215,7 +216,7 @@ public class GameInterface extends ViewInterface {
             for (int row = 0; row < numRows; row++)
                 for (int col = 0; col < numColumns; col++) {
                     int[] current = new int[]{row, col};
-                    if (checkMatch(current))
+                    if (checkMatch(current, false))
                         doMatch(current, false);
                 }
     }
@@ -293,54 +294,30 @@ public class GameInterface extends ViewInterface {
     }
 
     public void clearBoard() {
-
-        for (int row = 0; row < numRows; row++)
+        for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numColumns; col++) {
-                JButton current = buttons[row][col];
-                Icon i = getRandom(icons);
-                current.setIcon(i);
-                emojiPanel.validate();
+                int finalRow = row;
+                int finalCol = col;
                 SwingUtilities.invokeLater(() -> {
+                    JButton current = buttons[finalRow][finalCol];
+                    Icon i;
+                    do {
+                        i = getRandom(icons);
+                    } while (countMatches(new int[]{finalRow, finalCol}, UP, Optional.of(i)) >= 2 ||
+                            countMatches(new int[]{finalRow, finalCol}, LEFT, Optional.of(i)) >= 2);
                     current.setIcon(i);
-                    emojiPanel.validate();
                 });
             }
-
-
-        // ensure we don't have any matches already in the page
-        if (anyMatches()) {
-            for (int row = 0; row < numRows; row++)
-                for (int col = 0; col < numColumns; col++) {
-                    if (checkMatch(new int[]{row, col})) {
-                        JButton currentButton = buttons[row][col];
-                        Icon currentIcon = currentButton.getIcon();
-                        Icon nextIcon;
-
-                        do {
-                            nextIcon = getRandom(icons);
-                        } while (nextIcon.equals(currentIcon) || createsMatch(nextIcon, new int[]{row, col}));
-
-                        Icon finalNextIcon = nextIcon;
-                        System.out.println("Changing [" + row + ", " + col + "] from " + currentIcon.toString() + " to " + nextIcon.toString());
-
-                        currentButton.setIcon(finalNextIcon);
-                        emojiPanel.validate();
-                        SwingUtilities.invokeLater(() -> {
-                            currentButton.setIcon(finalNextIcon);
-                            emojiPanel.validate();
-                        });
-                    }
-                }
         }
     }
 
-    private boolean createsMatch(Icon icon, int[] coords) {
+    private boolean createsMatch(Icon icon, int[] coords, boolean ignorePositiveX) {
         Icon backup = buttons[coords[0]][coords[1]].getIcon();
         boolean result;
 
         buttons[coords[0]][coords[1]].setIcon(icon);
 
-        result = checkMatch(coords);
+        result = checkMatch(coords, ignorePositiveX);
         buttons[coords[0]][coords[1]].setIcon(backup);
         return result;
     }
@@ -361,6 +338,7 @@ public class GameInterface extends ViewInterface {
                 above = getButton(aboveCoords).getIcon();
             }
 
+            // TODO: possibly move into invokeLater
             current.setIcon(above);
             emojiPanel.validate();
         }
