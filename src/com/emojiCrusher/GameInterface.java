@@ -30,12 +30,11 @@ public class GameInterface extends ViewInterface {
     private final int numColumns;
     private int[] firstCoords;
     private List<Icon> icons;
-    private Connection database;
 
     // constructor
-    public GameInterface() {
+    public GameInterface(List<Icon> icons) {
         super("gameInterface");
-        icons = new ArrayList<>();
+        this.icons = icons;
 
         numRows = 6;
         numColumns = 6;
@@ -130,26 +129,6 @@ public class GameInterface extends ViewInterface {
         emojiPanel.validate();
     }
 
-    private void loadDBEmojis(){
-        icons.clear();
-        Statement connection = null;
-        try {
-            database = DriverManager.getConnection("jdbc:sqlite:test.db");
-            connection = database.createStatement();
-            String command = "Select * FROM EmojiPool;";
-            ResultSet saved_Emoji = connection.executeQuery(command);
-            while(saved_Emoji.next()){
-                icons.add(new ImageIcon(saved_Emoji.getString("path")));
-                System.out.println(new String(saved_Emoji.getString("path")));
-            }
-            System.out.println("LOADED SAVED EMOJIES FROM DATABASE");
-
-        } catch (SQLException e) {
-            System.out.println("ERROR: Couldn't load saved emojies" + e.getMessage());
-            System.exit(0);
-        }
-    }
-
     // changing states
     private void shiftDown(int up, int down, int[] coords) {
         int column = coords[1];
@@ -185,8 +164,8 @@ public class GameInterface extends ViewInterface {
     }
 
     // clearing things
-    public void clearBoard() {
-        loadDBEmojis();
+    public void clearBoard(List<Icon> icons) {
+        this.icons = icons;
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numColumns; col++) {
 
@@ -196,7 +175,7 @@ public class GameInterface extends ViewInterface {
                     JButton current = buttons[finalRow][finalCol];
                     Icon i;
                     do {
-                        i = getRandom(icons);
+                        i = getRandom(this.icons);
                     } while (countMatches(new int[]{finalRow, finalCol}, UP, Optional.of(i)) >= 2 ||
                             countMatches(new int[]{finalRow, finalCol}, LEFT, Optional.of(i)) >= 2);
                     current.setIcon(i);
@@ -377,7 +356,6 @@ public class GameInterface extends ViewInterface {
 
         // List of all files in pool
         // FIXME: Don't use this break system for limiting, migrate to using database later.
-        loadDBEmojis();
 
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numColumns; j++) {
