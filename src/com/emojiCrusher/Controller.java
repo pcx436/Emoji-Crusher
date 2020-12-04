@@ -116,9 +116,10 @@ public class Controller {
 
     // starts the game
     public static void main(String[] args) {
-        String path = null;
+        Controller ct;
         if (args.length == 1)
-            path = args[0];
-        Controller ct = new Controller(path);
+            ct = new Controller(args[0]);
+        else
+            System.err.println("Please specify the path to the emoji folder.");
     }
 }
