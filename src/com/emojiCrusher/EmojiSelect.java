@@ -20,12 +20,17 @@ public class EmojiSelect extends ViewInterface {
     private final int numRows;
     private final int numColumns;
     private List <String> emojiPaths;
+    private final String path;
 
     // constructor
-    public EmojiSelect() {
+    public EmojiSelect(String path) {
         super("emojiSelect");
+        numSelected = 0;
+        emojiPaths = new ArrayList<>();
+        this.path = path;
         numRows = 4;
         numColumns = 5;
+
         $$$setupUI$$$();
         frame.setContentPane(mainPanel);
         postSetup();
@@ -69,13 +74,11 @@ public class EmojiSelect extends ViewInterface {
 
     // magic
     private void createUIComponents() {
-        numSelected = 0;
-        emojiPaths = new ArrayList<>();
         SelectionMenu = new JPanel();
         buttons = new JButton[numRows][numColumns];
         SelectionMenu.setLayout(new GridLayout(numRows, numColumns));
 
-        String parent = "./emoji/png/labeled/Pool/";
+        String parent = path;
 
         List<ImageIcon> icons = new ArrayList<>();
 

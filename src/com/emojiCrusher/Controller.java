@@ -17,9 +17,9 @@ public class Controller {
     private Timer timeRate;
 
     // constructor
-    public Controller() {
+    public Controller(String path) {
         model = new Model(5, 10);
-        emojiSelect = new EmojiSelect();
+        emojiSelect = new EmojiSelect(path);
         gameInterface = new GameInterface(model.loadEmojisDB());
         scoreBoard = new ScoreBoard();
         mainMenu = new MainMenu();
@@ -116,6 +116,9 @@ public class Controller {
 
     // starts the game
     public static void main(String[] args) {
-        Controller ct = new Controller();
+        String path = null;
+        if (args.length == 1)
+            path = args[0];
+        Controller ct = new Controller(path);
     }
 }

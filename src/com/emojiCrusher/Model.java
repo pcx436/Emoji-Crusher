@@ -18,7 +18,7 @@ public class Model {
     public Model(int maxEmojis, int maxScores) {
         this.maxEmojis = maxEmojis;
         this.maxScoreDisplay = maxScores;
-        scoreTable = new ArrayList();
+        scoreTable = new ArrayList<List<String>>();
         createDB();
         loadScoreDB();
     }
@@ -75,6 +75,12 @@ public class Model {
 
     // database interaction
     private void createDB() {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Couldn't find java driver for JDBC");
+            System.exit(1);
+        }
         try {
             Statement connection1 = null;
             Statement connection2 = null;
