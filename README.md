@@ -7,8 +7,4 @@
 * Kyle Stewart
 
 ##Instructions to Run:
-In terminal:
-
-javac Controller.java
-
-java Controller.java
+TODO
