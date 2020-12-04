@@ -58,14 +58,7 @@ public class GameInterface extends ViewInterface {
         this.totalPoints = totalPoints;
     }
 
-
-    /**
-     * find that button!!
-     * @param btn
-     * @return  coordinates of button or [-1, -1]
-     */
-
-    // involked when icon is clicked
+    // invoked when icon is clicked
     public void actionPerformed(ActionEvent actionEvent) {
         JButton btn = (JButton)actionEvent.getSource();
         int[] coords = findButton(btn);
@@ -272,6 +265,11 @@ public class GameInterface extends ViewInterface {
         return current;
     }
 
+    /**
+     * find that button!!
+     * @param btn
+     * @return  coordinates of button or [-1, -1]
+     */
     private int[] findButton(JButton btn) {
         for(int i = 0; i < numRows; i++)
             for(int j = 0; j < numColumns; j++)
