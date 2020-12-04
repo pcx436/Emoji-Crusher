@@ -9,26 +9,22 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class ScoreBoard extends ViewInterface {
+
+    // attributes
     private JTable scoreTable;
     private JLabel ScoreBoardLabel;
     private DefaultTableModel tableModel;
 
+    // constructor
+    public ScoreBoard() {
+        super("scoreBoard");
+        $$$setupUI$$$();
+        frame.setContentPane(mainPanel);
+        postSetup();
+    }
+
+    // getter and setter
     // FIXME: table cells are editable???
-    public DefaultTableModel getTableModel() {
-        return tableModel;
-    }
-
-    public void setTableModel(DefaultTableModel tableModel) {
-        this.tableModel = tableModel;
-    }
-
-    private void createUIComponents() {
-        tableModel = new DefaultTableModel();
-        tableModel.addColumn("Name");
-        tableModel.addColumn("Score");
-        scoreTable = new JTable(tableModel);
-    }
-
     public JTable getScoreTable() {
         return scoreTable;
     }
@@ -56,11 +52,20 @@ public class ScoreBoard extends ViewInterface {
         this.mainPanel.revalidate();
     }
 
-    public ScoreBoard() {
-        super("scoreBoard");
-        $$$setupUI$$$();
-        frame.setContentPane(mainPanel);
-        postSetup();
+    public DefaultTableModel getTableModel() {
+        return tableModel;
+    }
+
+    public void setTableModel(DefaultTableModel tableModel) {
+        this.tableModel = tableModel;
+    }
+
+    // magic
+    private void createUIComponents() {
+        tableModel = new DefaultTableModel();
+        tableModel.addColumn("Name");
+        tableModel.addColumn("Score");
+        scoreTable = new JTable(tableModel);
     }
 
     /**
