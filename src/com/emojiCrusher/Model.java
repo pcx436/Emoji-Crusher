@@ -139,4 +139,23 @@ public class Model {
 
     }
 
+    public List<Icon> loadDBEmojis(){
+        List<Icon> icons = new ArrayList<>();
+        Statement connection;
+        try {
+            database = DriverManager.getConnection("jdbc:sqlite:test.db");
+            connection = database.createStatement();
+            String command = "Select * FROM EmojiPool;";
+            ResultSet saved_Emoji = connection.executeQuery(command);
+            while(saved_Emoji.next()){
+                icons.add(new ImageIcon(saved_Emoji.getString("path")));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("ERROR: Couldn't load saved emoji" + e.getMessage());
+            System.exit(0);
+        }
+        return icons;
+    }
+
 }
