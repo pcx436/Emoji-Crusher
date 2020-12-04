@@ -30,7 +30,6 @@ public class GameInterface extends ViewInterface {
     private final int numColumns;
     private int[] firstCoords;
     private final List<ImageIcon> icons;
-    private List<String> saved_EmojiPaths = new ArrayList<>();
     private Connection database;
 
     // constructor
@@ -378,11 +377,8 @@ public class GameInterface extends ViewInterface {
         buttons = new JButton[numRows][numColumns];
         emojiPanel.setLayout(new GridLayout(numRows, numColumns));
 
-        String parent = "./emoji/png/labeled/Pool/";
-
         // List of all files in pool
         // FIXME: Don't use this break system for limiting, migrate to using database later.
-        int count = 0;
         loadDBEmojis();
 
         for (int i = 0; i < numRows; i++) {
