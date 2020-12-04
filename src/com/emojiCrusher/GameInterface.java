@@ -19,17 +19,17 @@ import static com.emojiCrusher.MatchDirection.*;
 public class GameInterface extends ViewInterface {
 
     // attribute
-    private JButton[][] buttons;
-    private JTextPane scoreValue;
     private int totalPoints;
+    private int[] firstCoords;
+    private final int numRows;
+    private final int numColumns;
+    private List<Icon> icons;
+    private JButton[][] buttons;
     private JPanel emojiPanel;
     private JPanel subPanel;
     private JProgressBar timeBar;
     private JLabel ScoreLabel;
-    private final int numRows;
-    private final int numColumns;
-    private int[] firstCoords;
-    private List<Icon> icons;
+    private JTextPane scoreValue;
 
     // constructor
     public GameInterface(List<Icon> icons) {
