@@ -29,7 +29,7 @@ public class GameInterface extends ViewInterface {
     private final int numRows;
     private final int numColumns;
     private int[] firstCoords;
-    private final List<ImageIcon> icons;
+    private List<Icon> icons;
     private Connection database;
 
     // constructor
