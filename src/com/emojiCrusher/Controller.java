@@ -1,7 +1,6 @@
 package com.emojiCrusher;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class Controller {
     public Controller() {
         model = new Model(5, 10);
         emojiSelect = new EmojiSelect();
-        gameInterface = new GameInterface();
+        gameInterface = new GameInterface(model.loadDBEmojis());
         scoreBoard = new ScoreBoard();
         mainMenu = new MainMenu();
         gameOver = new GameOver();
@@ -41,7 +40,7 @@ public class Controller {
             gameInterface.getTimeBar().setValue(100);
             time.setDelay(1000);
             gameInterface.setTotalPoints(0);
-            gameInterface.clearBoard();
+            gameInterface.clearBoard(model.loadDBEmojis());
             gameInterface.getFrame().setVisible(true);
             mainMenu.getFrame().setVisible(false);
             time.start();
