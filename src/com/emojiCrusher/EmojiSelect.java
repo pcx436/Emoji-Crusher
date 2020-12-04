@@ -17,11 +17,6 @@ public class EmojiSelect extends ViewInterface {
     private int numSelected;
     private final int numRows;
     private final int numColumns;
-
-    public List<String> getEmojiPaths() {
-        return emojiPaths;
-    }
-
     private List <String> emojiPaths;
 
     public EmojiSelect() {
@@ -33,6 +28,28 @@ public class EmojiSelect extends ViewInterface {
         postSetup();
     }
 
+    // getter and setters
+    public List<String> getEmojiPaths() {
+        return emojiPaths;
+    }
+
+    public void setButtons(JButton[][] buttons) {
+        this.buttons = buttons;
+    }
+
+    public void setSelectionMenu(JPanel selectionMenu) {
+        SelectionMenu = selectionMenu;
+    }
+
+    public JPanel getSelectionMenu() {
+        return SelectionMenu;
+    }
+
+    public JButton[][] getButtons() {
+        return buttons;
+    }
+
+    // loads the paths for the emoji pngs
     public void loadPaths(List<ImageIcon> icons) {
         emojiPaths.clear();
 
@@ -47,6 +64,7 @@ public class EmojiSelect extends ViewInterface {
                     buttons[i][j].setBackground(Color.WHITE);
     }
 
+    // magic
     private void createUIComponents() {
         numSelected = 0;
         emojiPaths = new ArrayList<>();
@@ -95,22 +113,6 @@ public class EmojiSelect extends ViewInterface {
         }
 
         SelectionMenu.setVisible(true);
-    }
-
-    public JButton[][] getButtons() {
-        return buttons;
-    }
-
-    public void setButtons(JButton[][] buttons) {
-        this.buttons = buttons;
-    }
-
-    public JPanel getSelectionMenu() {
-        return SelectionMenu;
-    }
-
-    public void setSelectionMenu(JPanel selectionMenu) {
-        SelectionMenu = selectionMenu;
     }
 
 
