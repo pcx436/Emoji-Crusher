@@ -279,6 +279,12 @@ public class GameInterface extends ViewInterface {
         return result;
     }
 
+    /**
+     * Check if the coordinates have any matches nearby
+     * @param coords coordinates to check for matches
+     * @param ignorePositiveX if true, only check directions UP and LEFT, not down or right.
+     * @return true if any matches can be made
+     */
     private boolean checkMatch(int[] coords, boolean ignorePositiveX) {
         int up = countMatches(coords, UP, Optional.empty());
         int down = countMatches(coords, DOWN, Optional.empty());
@@ -291,6 +297,11 @@ public class GameInterface extends ViewInterface {
             return up + down >= 2 || left + right >= 2;
     }
 
+    /**
+     * Checks if provided coordinates are outside the game's grid
+     * @param cds Coordinates to validate
+     * @return true if coordinates are out of bounds, false otherwise.
+     */
     private boolean outOfBounds(int[] cds) {
         boolean retVal = cds[0] < 0 || cds[0] >= numRows || cds[1] < 0 || cds[1] >= numColumns;
         if (retVal)
@@ -299,15 +310,26 @@ public class GameInterface extends ViewInterface {
         return retVal;
     }
 
-    // randomly pick an icon from a set
-    // https://stackoverflow.com/a/40087987
+    /**
+     * Get a random element from a collection
+     * source: https://stackoverflow.com/a/40087987
+     * @param e collection to pick from
+     * @param <E> type of element
+     * @return random element from provided collection
+     */
     private <E> E getRandom(Collection<E> e) {
         return e.stream()
                 .skip((int) (e.size() * Math.random()))
                 .findFirst().get();
     }
 
-    // count the number of the match icons with a given direction
+    /**
+     * Count matches in a particular direction.
+     * @param cds Coordinates to check for match at
+     * @param dir Direction to make the match
+     * @param icon If given, use this icon to check for matches
+     * @return Number of matches in a given direction
+     */
     private int countMatches(int[] cds, MatchDirection dir, Optional<Icon> icon) {
         int matchCount = 0;
         Icon currentIcon = icon.orElse(getButton(cds).getIcon());
