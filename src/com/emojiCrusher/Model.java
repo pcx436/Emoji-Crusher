@@ -3,23 +3,46 @@ package com.emojiCrusher;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import javax.swing.*;
 
 public class Model {
 
+    // attributes
     private int maxEmojis;
     private int maxScoreDisplay;
     private List<String> emojis;
     private Connection database;
     private List<List<String>> scoreTable;
 
+    // constructor
     public Model(int maxEmojis, int maxScores) {
         this.maxEmojis = maxEmojis;
         this.maxScoreDisplay = maxScores;
         scoreTable = new ArrayList();
         createDB();
-        loadDB();
+        loadScoreDB();
+    }
+
+    // getter and setters
+    public List<List<String>> getScoreTable() {
+        return scoreTable;
+    }
+
+    public List<ImageIcon> getEmojis() {
+        Statement connection = null;
+        List<ImageIcon> icons = new ArrayList<>();
+
+        try {
+            connection = database.createStatement();
+            String command = "SELECT path FROM EmojiPool;";
+            ResultSet resultSet = connection.executeQuery(command);
+            while (resultSet.next()) {
+                icons.add(new ImageIcon(resultSet.getString("path")));
+            }
+        } catch (SQLException e) {
+            System.out.println("ERROR: Couldn't retrieve Paths" + e.getMessage());
+        }
+        return icons;
     }
 
     public void setEmojis(List<String> emojis) {
@@ -50,43 +73,7 @@ public class Model {
 
     }
 
-    public void saveScore(int totalScore, String name) {
-        String command = "INSERT INTO scoreBoard(name, score) VALUES (\"" + name + "\", " + String.valueOf(totalScore) + ");";
-        Statement connection2 = null;
-        try {
-            connection2 = database.createStatement();
-            connection2.executeUpdate(command);
-            System.out.println("INSERTED SCORE and NAME into database");
-
-        } catch (SQLException e) {
-            System.out.println("ERROR: Score machine broke" + e.getMessage());
-            System.exit(0);
-        }
-        loadDB();
-
-    }
-
-    public List<List<String>> getScoreTable() {
-        return scoreTable;
-    }
-
-    public List<ImageIcon> getEmojis() {
-        Statement connection = null;
-        List<ImageIcon> icons = new ArrayList<>();
-
-        try {
-            connection = database.createStatement();
-            String command = "SELECT path FROM EmojiPool;";
-            ResultSet resultSet = connection.executeQuery(command);
-            while (resultSet.next()) {
-                icons.add(new ImageIcon(resultSet.getString("path")));
-            }
-        } catch (SQLException e) {
-            System.out.println("ERROR: Couldn't retrieve Paths" + e.getMessage());
-        }
-        return icons;
-    }
-
+    // database interaction
     private void createDB() {
         try {
             Statement connection1 = null;
@@ -116,7 +103,26 @@ public class Model {
         }
     }
 
-    public void loadDB() {
+    public List<Icon> loadEmojisDB(){
+        List<Icon> icons = new ArrayList<>();
+        Statement connection;
+        try {
+            database = DriverManager.getConnection("jdbc:sqlite:test.db");
+            connection = database.createStatement();
+            String command = "Select * FROM EmojiPool;";
+            ResultSet saved_Emoji = connection.executeQuery(command);
+            while(saved_Emoji.next()){
+                icons.add(new ImageIcon(saved_Emoji.getString("path")));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("ERROR: Couldn't load saved emoji" + e.getMessage());
+            System.exit(0);
+        }
+        return icons;
+    }
+
+    public void loadScoreDB() {
         Statement connection1 = null;
         String command = "SELECT name, score FROM scoreboard ORDER BY score DESC LIMIT "+
                 String.valueOf(maxScoreDisplay) + ";";
@@ -136,6 +142,22 @@ public class Model {
             System.out.println("ERROR: Can't Load Database: " + e.getMessage());
             System.exit(0);
         }
+
+    }
+
+    public void saveScoreDB(int totalScore, String name) {
+        String command = "INSERT INTO scoreBoard(name, score) VALUES (\"" + name + "\", " + String.valueOf(totalScore) + ");";
+        Statement connection2 = null;
+        try {
+            connection2 = database.createStatement();
+            connection2.executeUpdate(command);
+            System.out.println("INSERTED SCORE and NAME into database");
+
+        } catch (SQLException e) {
+            System.out.println("ERROR: Score machine broke" + e.getMessage());
+            System.exit(0);
+        }
+        loadScoreDB();
 
     }
 

@@ -1,11 +1,12 @@
 package com.emojiCrusher;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
 public class Controller {
+
+    // attribute
     private final EmojiSelect emojiSelect;
     private final GameInterface gameInterface;
     private final ScoreBoard scoreBoard;
@@ -15,10 +16,11 @@ public class Controller {
     private Timer time;
     private Timer timeRate;
 
+    // constructor
     public Controller() {
         model = new Model(5, 10);
         emojiSelect = new EmojiSelect();
-        gameInterface = new GameInterface();
+        gameInterface = new GameInterface(model.loadEmojisDB());
         scoreBoard = new ScoreBoard();
         mainMenu = new MainMenu();
         gameOver = new GameOver();
@@ -30,6 +32,29 @@ public class Controller {
         mainMenu.getFrame().setVisible(true);
     }
 
+    // set up listener for all quit buttons
+    private void quitBehavior() {
+        emojiSelect.getQuitButton().addActionListener(actionEvent -> {
+            emojiSelect.getFrame().setVisible(false);
+            List<String> path = emojiSelect.getEmojiPaths();
+            model.setEmojis(path);
+            mainMenu.getFrame().setVisible(true);
+        });
+
+        gameInterface.getQuitButton().addActionListener(actionEvent -> {
+            gameInterface.getFrame().setVisible(false);
+            mainMenu.getFrame().setVisible(true);
+            time.stop();
+            timeRate.stop();
+        });
+
+        scoreBoard.getQuitButton().addActionListener(actionEvent -> {
+            scoreBoard.getFrame().setVisible(false);
+            mainMenu.getFrame().setVisible(true);
+        });
+    }
+
+    // set up listener for all buttons in main menu that is not quit/exit
     private void initMain() {
         startTime();
         mainMenu.getEmojiPickerButton().addActionListener(actionEvent -> {
@@ -41,7 +66,7 @@ public class Controller {
             gameInterface.getTimeBar().setValue(100);
             time.setDelay(1000);
             gameInterface.setTotalPoints(0);
-            gameInterface.clearBoard();
+            gameInterface.clearBoard(model.loadEmojisDB());
             gameInterface.getFrame().setVisible(true);
             mainMenu.getFrame().setVisible(false);
             time.start();
@@ -66,12 +91,13 @@ public class Controller {
         gameOver.getNameField().addActionListener(actionEvent -> {
             System.out.println("ya hit enter: " + gameOver.getNameField().getText());
             System.out.println("Points: " + gameInterface.getTotalPoints());
-            model.saveScore(gameInterface.getTotalPoints(), gameOver.getNameField().getText());
+            model.saveScoreDB(gameInterface.getTotalPoints(), gameOver.getNameField().getText());
             gameOver.getFrame().setVisible(false);
             mainMenu.getFrame().setVisible(true);
         });
     }
 
+    // logic for timer behavior
     public void startTime(){
         ActionListener countDown = e -> {
             gameInterface.getTimeBar().setValue(gameInterface.getTimeBar().getValue()-1);
@@ -88,24 +114,8 @@ public class Controller {
         timeRate = new Timer(30000, TimeRate);
     }
 
-    private void quitBehavior() {
-        emojiSelect.getQuitButton().addActionListener(actionEvent -> {
-            emojiSelect.getFrame().setVisible(false);
-            List<String> path = emojiSelect.getEmojiPaths();
-            model.setEmojis(path);
-            mainMenu.getFrame().setVisible(true);
-        });
-
-        gameInterface.getQuitButton().addActionListener(actionEvent -> {
-            gameInterface.getFrame().setVisible(false);
-            mainMenu.getFrame().setVisible(true);
-            time.stop();
-            timeRate.stop();
-        });
-
-        scoreBoard.getQuitButton().addActionListener(actionEvent -> {
-            scoreBoard.getFrame().setVisible(false);
-            mainMenu.getFrame().setVisible(true);
-        });
+    // starts the game
+    public static void main(String[] args) {
+        Controller ct = new Controller();
     }
 }
