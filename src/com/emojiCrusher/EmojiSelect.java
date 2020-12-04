@@ -11,92 +11,114 @@ import java.io.File;
 import java.util.*;
 import java.util.List;
 
-public class EmojiSelect {
-    private JPanel panel1;
+public class EmojiSelect extends ViewInterface {
+
+    // attribute
     private JButton[][] buttons;
-    private JButton quitButton;
-    private JFrame frame;
     private JPanel SelectionMenu;
+    private int numSelected;
+    private final int numRows;
+    private final int numColumns;
+    private List <String> emojiPaths;
+    private final String path;
 
-    private void createUIComponents() {
-        int numRows = 10;
-        SelectionMenu = new JPanel();
-        buttons = new JButton[numRows][numRows];
-        SelectionMenu.setLayout(new GridLayout(numRows, numRows));
+    // constructor
+    public EmojiSelect(String path) {
+        super("emojiSelect");
+        numSelected = 0;
+        emojiPaths = new ArrayList<>();
+        this.path = path;
+        numRows = 4;
+        numColumns = 5;
 
-        String parent = "./emoji/png/labeled/64/";
-        List<File> dirs = new ArrayList<>();
-
-        List<ImageIcon> icons = new ArrayList<>();
-
-        dirs.add(new File(parent + "people"));
-
-        //List of all files and directories
-        for (File d : dirs) {
-            for (File icon : Objects.requireNonNull(d.listFiles())) {
-                icons.add(new ImageIcon(icon.getAbsolutePath()));
-            }
-        }
-
-        int currentIcon = 0;
-        for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numRows; j++, currentIcon++) {
-                JButton current = new JButton(icons.get(currentIcon));
-                current.setFocusPainted(false);
-                current.setBackground(Color.white);
-                current.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        current.setBackground(Color.GREEN);
-                    }
-                });
-
-                buttons[i][j] = current;
-                SelectionMenu.add(current);
-            }
-        }
-
-        SelectionMenu.setVisible(true);
+        $$$setupUI$$$();
+        frame.setContentPane(mainPanel);
+        postSetup();
     }
 
-    public JButton[][] getButtons() {
-        return buttons;
+    // getter and setters
+    public List<String> getEmojiPaths() {
+        return emojiPaths;
     }
 
     public void setButtons(JButton[][] buttons) {
         this.buttons = buttons;
     }
 
-    public JButton getQuitButton() {
-        return quitButton;
-    }
-
-    public void setQuitButton(JButton quitButton) {
-        this.quitButton = quitButton;
-    }
-
-    public JFrame getFrame() {
-        return frame;
-    }
-
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
+    public void setSelectionMenu(JPanel selectionMenu) {
+        SelectionMenu = selectionMenu;
     }
 
     public JPanel getSelectionMenu() {
         return SelectionMenu;
     }
 
-    public void setSelectionMenu(JPanel selectionMenu) {
-        SelectionMenu = selectionMenu;
+    public JButton[][] getButtons() {
+        return buttons;
     }
 
-    public EmojiSelect() {
-        frame = new JFrame("emojiSelect");
-        $$$setupUI$$$();
-        frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
+    // loads the paths for the emoji pngs
+    public void loadPaths(List<ImageIcon> icons) {
+        emojiPaths.clear();
+
+        for(ImageIcon icon: icons)
+            emojiPaths.add(icon.toString());
+
+        for (int i = 0; i < numRows; i++)
+            for (int j = 0; j < numColumns; j++)
+                if (emojiPaths.contains(buttons[i][j].getIcon().toString()))
+                    buttons[i][j].setBackground(Color.GREEN);
+                else
+                    buttons[i][j].setBackground(Color.WHITE);
+    }
+
+    // magic
+    private void createUIComponents() {
+        SelectionMenu = new JPanel();
+        buttons = new JButton[numRows][numColumns];
+        SelectionMenu.setLayout(new GridLayout(numRows, numColumns));
+
+        String parent = path;
+
+        List<ImageIcon> icons = new ArrayList<>();
+
+        //List of all files and directories
+        for (File icon : Objects.requireNonNull(new File(parent).listFiles())) {
+            icons.add(new ImageIcon(icon.getAbsolutePath()));
+        }
+
+        int currentIcon = 0;
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numColumns; j++, currentIcon++) {
+                JButton current = new JButton(icons.get(currentIcon));
+                current.setOpaque(true);
+                current.setFocusPainted(false);
+                current.setBackground(Color.WHITE);
+                current.addActionListener(actionEvent -> {
+                    JButton C = (JButton) actionEvent.getSource();
+                    //handles toggling the background green highlight on/off when selected
+                    if(current.getBackground() == Color.white && numSelected < 5) {
+                        //FIXME: replace 5 with a variable
+                        C.setBackground(Color.green);
+                        emojiPaths.add(C.getIcon().toString());
+                        System.out.println(emojiPaths);
+                        numSelected++;
+                    }
+                    else if (current.getBackground() == Color.green) {
+                        C.setBackground(Color.white);
+                        emojiPaths.remove(C.getIcon().toString());
+                        System.out.println(emojiPaths);
+                        numSelected--;
+                    }
+                });
+
+                buttons[i][j] = current;
+
+                SelectionMenu.add(current);
+            }
+        }
+
+        SelectionMenu.setVisible(true);
     }
 
     /**
@@ -106,21 +128,20 @@ public class EmojiSelect {
      *
      * @noinspection ALL
      */
-    private void $$$setupUI$$$() {
+    protected void $$$setupUI$$$() {
         createUIComponents();
-        panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         quitButton = new JButton();
         quitButton.setText("Quit");
-        panel1.add(quitButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        panel1.add(SelectionMenu, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        mainPanel.add(quitButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mainPanel.add(SelectionMenu, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     }
 
     /**
      * @noinspection ALL
      */
     public JComponent $$$getRootComponent$$$() {
-        return panel1;
+        return mainPanel;
     }
-
 }
