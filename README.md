@@ -2,9 +2,9 @@
 #Emoji Crusher
 
 ##Group Members:
-* Kyle Stewart
 * Vincent Liu
 * Jacob Malcy
+* Kyle Stewart
 
 ##Instructions to Run:
 In terminal:
