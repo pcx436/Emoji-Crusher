@@ -108,4 +108,8 @@ public class Controller {
             mainMenu.getFrame().setVisible(true);
         });
     }
+
+    public static void main(String[] args) {
+        Controller ct = new Controller();
+    }
 }
