@@ -18,7 +18,7 @@ public class Controller {
 
     // constructor
     public Controller(String path) {
-        model = new Model(5, 10);
+        model = new Model(5, 10, path);
         emojiSelect = new EmojiSelect(path);
         gameInterface = new GameInterface(model.loadEmojisDB());
         scoreBoard = new ScoreBoard();

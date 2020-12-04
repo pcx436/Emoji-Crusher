@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.plaf.nimbus.State;
 
 public class Model {
 
@@ -13,11 +14,13 @@ public class Model {
     private List<String> emojis;
     private Connection database;
     private List<List<String>> scoreTable;
+    private final String path;
 
     // constructor
-    public Model(int maxEmojis, int maxScores) {
+    public Model(int maxEmojis, int maxScores, String defaultPath) {
         this.maxEmojis = maxEmojis;
         this.maxScoreDisplay = maxScores;
+        this.path = defaultPath;
         scoreTable = new ArrayList<List<String>>();
         createDB();
         loadScoreDB();
@@ -81,6 +84,14 @@ public class Model {
             System.err.println("Couldn't find java driver for JDBC");
             System.exit(1);
         }
+
+        List<String> startingEmoji = new ArrayList<>();
+        startingEmoji.add(path + "/alien.png");
+        startingEmoji.add(path + "/ghost.png");
+        startingEmoji.add(path + "/top-hat.png");
+        startingEmoji.add(path + "/pile-of-poo.png");
+        startingEmoji.add(path + "/zombie.png");
+
         try {
             Statement connection1 = null;
             Statement connection2 = null;
@@ -102,7 +113,10 @@ public class Model {
                     ");";
             connection2.executeUpdate(command);
 
-            System.out.println("Created both tables.");
+            Statement connection3 = database.createStatement();
+            String s = "(\"" + String.join("\"),(\"", startingEmoji) + "\");";
+            command = "INSERT INTO `EmojiPool` (path) VALUES " + s;
+            connection3.executeUpdate(command);
 
         } catch (SQLException e) {
             System.out.println("Error: Database Connection" + e.getMessage());
