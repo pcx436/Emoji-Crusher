@@ -10,6 +10,7 @@ Candy crush clone but with emoji.
 ```
 cd src/com/emojiCrusher
 javac -cp ".:../../../lib/*" *.java
+cd ../../
 java -classpath "../lib/*:." com.emojiCrusher.Controller <PATH_TO_EMOJI_PNG_DIRECTORY>
 ```
 
